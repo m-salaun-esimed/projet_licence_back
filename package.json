@@ -1,0 +1,17 @@
+{
+    "name": "exemple",
+    "dependencies": {
+    "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "pg": "^8.11.3",
+        "bcrypt": "^4.0.1",
+        "jsonwebtoken": "^8.5.1"
+
+    },
+    "scripts": {
+    "run": "node main.js",
+        "debug": "node --inspect --inspect-brk main.js"
+}
+}
