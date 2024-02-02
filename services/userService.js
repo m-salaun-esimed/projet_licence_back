@@ -27,8 +27,7 @@ module.exports = class UserService {
     async validateCreationCompte(displayName, login, password) {
         const userByLogin = await this.dao.getByLogin(login.trim());
         const userByDisplayName = await this.dao.getByDisplayName(displayName.trim());
-
-        if (userByLogin === null && userByDisplayName === null) {
+        if (userByLogin === undefined && userByDisplayName === undefined) {
             return false;
         } else {
             return true;

@@ -38,16 +38,23 @@ module.exports = (app, userService, jwt) => {
         try {
             const { displayName, login, password} = req.body;
 
-            if (!displayName || !login || !password || password.length < 8) {
+            if (!displayName || !login || !password) {
                 res.status(400).end();
                 return;
             }
 
-            try {
-                const authenticated = await userService.validateCreationCompte(displayName, login, password);
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-                if (!authenticated) {
-                    res.status(401).end();
+            if (!passwordRegex.test(password)) {
+                res.status(400).json({ error: 'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.' });
+                return;
+            }
+
+            try {
+                const authenticated = await userService.validateCreationCompte(displayName, login);
+
+                if (authenticated) {
+                    res.status(400).json({ error: 'Le Pseudo ou le login existe déjà' });
                     return;
                 }
 
