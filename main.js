@@ -15,12 +15,19 @@ const db = new pg.Pool({ connectionString: connectionString });
 
 
 const UserService = require("./services/UserService");
+const MovieService = require("./services/movieService")
+const StreamingService = require("./services/streamingPlatformService")
+const CategorieService = require("./services/categorieService")
 
 const userService = new UserService(db);
+const movieService = new MovieService(db);
+const streamingService = new StreamingService(db);
+const categorieService = new CategorieService(db);
 
 const jwt = require('./jwt')(userService)
 require('./api/userApi')(app, userService, jwt)
-require('./datamodel/seeder')(userService)
+require('./api/streamingPlatformApi')(app, streamingService)
+require('./datamodel/seeder')(userService, movieService, streamingService, categorieService)
        .then(app.listen(3333))
 
 

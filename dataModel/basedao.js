@@ -13,6 +13,5 @@ module.exports = class BaseDAO {
         const query = `INSERT INTO ${this.tablename} (${keys.join(', ')}) VALUES (${placeholders})`;
 
         return this.db.query(query, values)
-
     }
 }

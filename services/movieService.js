@@ -1,9 +1,14 @@
 const MovieDao = require("../datamodel/movieDao.js")
 const bcrypt = require('bcrypt')
-const UserAccount = require('../datamodel/user')
+const Movie = require('../datamodel/movie')
 
 module.exports = class MovieService {
     constructor(db) {
-        this.dao = new MovieDao(db, "Movie")
+        this.dao = new MovieDao(db, "movie")
+    }
+
+    insertService(data){
+        return this.dao.insert(new Movie(data.name, data.idStreamingPlatform, data.idCategorys,
+        data.nameFilmMaker, data.date,data.description, data.moyenneNote, data.type))
     }
 }
