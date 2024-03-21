@@ -1,7 +1,7 @@
-// module.exports = (app, movieService, jwt) => {
-//     app.get("/movie", async (req, res) => {
+// module.exports = (app, movieService) => {
+//     app.get("/movieCategory", async (req, res) => {
 //         try {
-//             //const data = await movieService.dao.getAllMovie();
+//             const data = await movieService.dao.getAllMovieCategory();
 //             res.json(data);
 //         } catch (error) {
 //             console.error(error);

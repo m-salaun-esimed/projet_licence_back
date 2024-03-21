@@ -8,7 +8,6 @@ module.exports = class MovieService {
     }
 
     insertService(data){
-        return this.dao.insert(new Movie(data.name, data.idStreamingPlatform, data.idCategorys,
-        data.nameFilmMaker, data.date,data.description, data.moyenneNote, data.type))
+        return this.dao.insert(data)
     }
 }

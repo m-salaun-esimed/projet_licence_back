@@ -31,4 +31,11 @@ module.exports = class UserDao extends BaseDAO {
                 .then(res => resolve(res.rows[0]) )
                 .catch(e => reject(e)))
     }
+
+    getDisplayNameByLogin(login){
+        return new Promise((resolve, reject) =>
+            this.db.query("SELECT displayName FROM useraccount WHERE displayName=$1", [ login ])
+                .then(res => resolve(res.rows[0]) )
+                .catch(e => reject(e)))
+    }
 };

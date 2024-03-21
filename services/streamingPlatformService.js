@@ -7,6 +7,6 @@ module.exports = class StreamingService {
     }
 
     insertService(data){
-        return this.dao.insert(new Streaming(data.name))
+        return this.dao.insert(data)
     }
 }

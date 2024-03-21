@@ -17,13 +17,14 @@ module.exports = (app, userService, jwt) => {
                 res.status(400).end()
                 return
             }
+
             userService.validatePassword(login, password)
                 .then(authenticated => {
                     if (!authenticated) {
                         res.status(401).end()
                         return
                     }
-                    res.json({'token': jwt.generateJWT(login)})
+                    res.json({'token': jwt.generateJWT(login), 'user': login})
                 })
                 .catch(e => {
                     console.log(e)

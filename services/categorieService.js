@@ -8,6 +8,6 @@ module.exports = class CategorieService {
     }
 
     insertService(data){
-        return this.dao.insert(new Categorie(data.name))
+        return this.dao.insert(data)
     }
 }

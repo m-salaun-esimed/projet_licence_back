@@ -11,13 +11,19 @@ module.exports = class UserService {
         const user = await this.dao.getByLogin(login.trim())
         return this.comparePassword(password, user.password)
     }
-
+    
     hashPassword(password) {
         return bcrypt.hashSync(password, 10)  // 10 : cost factor -> + élevé = hash + sûr
     }
 
     insertService(data) {
-        return this.dao.insert(new UserAccount(data.displayName, data.login, this.hashPassword(data.password), data.admin))
+        const dataHash = {
+            displayName : data.password,
+            login : data.login,
+            password : this.hashPassword(data.password),
+            admin : data.admin
+        }
+        return this.dao.insert(dataHash)
     }
 
     comparePassword(password, hash) {
