@@ -10,4 +10,9 @@ module.exports = class CategorieService {
     insertService(data){
         return this.dao.insert(data)
     }
+
+    async findByApiId(idApi){
+        const data = await this.dao.findByApiIdDao(idApi)
+        return data
+    }
 }

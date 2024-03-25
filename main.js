@@ -30,7 +30,7 @@ const movieCategoryService= new MovieCategoryService(db);
 
 const jwt = require('./jwt')(userService)
 require('./api/userApi')(app, userService, jwt)
-// require('./api/movieApi')(app, movieService)
+require('./api/movieApi')(app, movieService)
 require('./api/categoryApi')(app, categorieService)
 
 require('./api/streamingPlatformApi')(app, streamingService)

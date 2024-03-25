@@ -7,7 +7,10 @@ module.exports = class MovieService {
         this.dao = new MovieDao(db, "movie")
     }
 
-    insertService(data){
-        return this.dao.insert(data)
+    async insertService(data) {
+        const insertedId = await this.dao.insert(data);
+        return insertedId;
     }
+
+
 }

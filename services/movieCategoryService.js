@@ -5,7 +5,7 @@ module.exports = class MovieCategoryService {
         this.dao = new MovieCategoryDao(db, "MovieCategory")
     }
 
-    insertService(data){
+    insertService(data) {
         return this.dao.insert(data)
     }
 }
