@@ -1,4 +1,5 @@
 module.exports =  (userService, movieService, categorieService, movieCategoryService) => {
+    console.log("seeder : avant return")
     return new Promise(async (resolve, reject) => {
     try {
         console.log("debut du seeder")
