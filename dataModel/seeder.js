@@ -187,7 +187,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
         //
         // }
 
-        //return Promise.resolve();
+        return Promise.resolve();
     } catch (e) {
         return Promise.reject(e);
     }
