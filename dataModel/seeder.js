@@ -2,30 +2,31 @@ const fetch = require("node-fetch");
 const fetchMovie = require("node-fetch");
 module.exports = async (userService, movieService, categorieService, movieCategoryService) => {
     try {
-
+        console.log("debut du seeder")
         //------------------------------------DROP TABLE-----------------------------------------
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS FavoriteMovie;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS MovieCategory ;
-        `);
-
-        await userService.dao.db.query(`
-            DROP TABLE IF EXISTS UserAccount;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Movie;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS Category;
-        `);
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS FavoriteMovie;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS MovieCategory ;
+        // `);
+        //
+        // await userService.dao.db.query(`
+        //     DROP TABLE IF EXISTS UserAccount;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Movie;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Category;
+        // `);
 
 
         //------------------------------------CREATE TABLE-----------------------------------------
+        console.log("création table")
 
         await categorieService.dao.db.query(`
             CREATE TABLE IF NOT EXISTS Category (
@@ -82,6 +83,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
 
 
         //-------------------------------------------CATEGORY--------------------------------------------
+        console.log("seeder category")
 
         const fetch = require('node-fetch');
         console.log("cat avant fecth")
