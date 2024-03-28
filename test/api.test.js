@@ -11,6 +11,7 @@ describe('API Tests', function() {
     let token = '';
 
     before( (done) => {
+        console.log("api.test.js : avant seeder")
         seedDatabase().then( async () => {
             console.log("Creating test user");
 
