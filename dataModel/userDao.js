@@ -14,6 +14,15 @@ module.exports = class UserDao extends BaseDAO {
         }
     }
 
+    async getIdUser(login) {
+        try {
+            const result = await this.db.query("SELECT id FROM useraccount WHERE login=$1", [ login ] );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async insertUser(data){
         return super.insert(data);
     }

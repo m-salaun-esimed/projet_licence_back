@@ -11,6 +11,4 @@ module.exports = class MovieService {
         const insertedId = await this.dao.insert(data);
         return insertedId;
     }
-
-
 }

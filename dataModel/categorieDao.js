@@ -23,4 +23,14 @@ module.exports = class CategorieDao extends BaseDAO {
         }
     }
 
+    async getAllByIdMovie(idMovie){
+        let tab = "moviecategory"
+        try {
+            const result = await this.db.query(`SELECT id FROM ${tab} WHERE idmovie = ${idMovie}`);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 };

@@ -10,6 +10,17 @@ module.exports = (app, userService, jwt) => {
         }
     });
 
+    app.get("/user/IdByLogin", async (req, res) => {
+        try {
+            const { login } = req.headers
+            const data = await userService.dao.getIdUser(login);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
     app.post('/user/authenticate', (req, res) => {
         try{
             const { login, password } = req.body
@@ -79,17 +90,8 @@ module.exports = (app, userService, jwt) => {
         }
     });
 
-    app.post('/api/verifyToken', (req, res, next) => {
-        jwt.validateJWT(req, res, (err) => {
-            if (err) {
-                console.error('La validation JWT a échoué :', err);
-                res.status(401).end();
-            } else {
-                console.log('La validation JWT a réussi, passons au gestionnaire de route suivant.');
-                next();
-            }
-        });
-    }, (req, res) => {
+    app.post('/api/verifyToken', jwt.validateJWT, (req, res, next) => {
         res.json({ status: 200, data: 'Token valide' });
+    }, (req, res) => {
     });
 }
