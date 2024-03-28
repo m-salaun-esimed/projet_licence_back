@@ -84,7 +84,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
         //-------------------------------------------CATEGORY--------------------------------------------
 
         const fetch = require('node-fetch');
-
+        console.log("cat avant fecth")
         const url = 'https://api.themoviedb.org/3/genre/movie/list';
         const options = {
             method: 'GET',
@@ -93,6 +93,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
                 Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
             }
         };
+        console.log("cat apres fecth")
 
         const response = await fetch(url, options);
         if (!response.ok) {
@@ -101,7 +102,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
         const json = await response.json();
         const genreNames = json.genres.map(genre => genre.name);
         const genreIds = json.genres.map(genre => genre.id);
-
+        console.log("genreNames" + genreNames)
         await Promise.all(genreNames.map(async (name, index) => {
             const data = {
                 name,
@@ -140,11 +141,13 @@ module.exports = async (userService, movieService, categorieService, movieCatego
                     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
                 }
             };
-
+            console.log("avant requete")
             const responseMovie = await fetchMovie(urlMovie, optionsMovie);
             if (!responseMovie.ok) {
                 throw new Error('Erreur lors de la récupération des données depuis l\'API');
             }
+            console.log("apres requete")
+
             const jsonMovie = await responseMovie.json();
             const titles = jsonMovie.results.map(movie => movie.title);
             const dates = jsonMovie.results.map(movie => movie.release_date);
@@ -154,7 +157,7 @@ module.exports = async (userService, movieService, categorieService, movieCatego
             const poster_path = jsonMovie.results.map(movie => movie.poster_path);
             const backdrop_path = jsonMovie.results.map(movie => movie.backdrop_path);
             const vote_average = jsonMovie.results.map(movie => movie.vote_average);
-
+            console.log("backdrop_path " + vote_average, "vote_average :" + backdrop_path)
             await Promise.all(titles.map(async (movieTitle, index) => {
                 const dataMovie  = {
                     idapi: idapi[index],
