@@ -16,7 +16,7 @@ const db = new pg.Pool({ connectionString: connectionString });
 const port = process.env.PORT || 3333;
 
 
-const UserService = require("./services/UserService");
+const UserService = require("./services/userService");
 const MovieService = require("./services/movieService")
 const CategorieService = require("./services/categorieService")
 const MovieCategoryService = require("./services/movieCategoryService")
