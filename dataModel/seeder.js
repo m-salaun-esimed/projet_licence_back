@@ -1,6 +1,9 @@
 const fetch = require("node-fetch");
 const fetchMovie = require("node-fetch");
-module.exports = async (userService, movieService, categorieService, movieCategoryService) => {
+module.exports =  (userService, movieService, categorieService, movieCategoryService) => {
+    return new Promise(async (resolve, reject) => {
+
+
     try {
         // console.log("debut du seeder")
         // //------------------------------------DROP TABLE-----------------------------------------
@@ -187,8 +190,10 @@ module.exports = async (userService, movieService, categorieService, movieCatego
         //
         // }
 
-        return Promise.resolve();
+        resolve()
     } catch (e) {
-        return Promise.reject(e);
+        console.log(e)
+        reject(e)
     }
+    })
 };
