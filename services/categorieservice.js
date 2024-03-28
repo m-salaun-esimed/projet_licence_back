@@ -1,4 +1,4 @@
-const CategorieDao = require("../datamodel/categorieDao.js")
+const CategorieDao = require("../dataModel/categoriedao.js")
 const bcrypt = require('bcrypt')
 const Categorie = require("../dataModel/categorie");
 

@@ -1,4 +1,4 @@
-const MovieDao = require("../datamodel/movieDao.js")
+const MovieDao = require("../dataModel/moviedao.js")
 const bcrypt = require('bcrypt')
 const Movie = require('../datamodel/movie')
 

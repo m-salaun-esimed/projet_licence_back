@@ -1,4 +1,4 @@
-const UserDao = require("../datamodel/userDao.js")
+const UserDao = require("../dataModel/userdao.js")
 const bcrypt = require('bcrypt')
 const UserAccount = require('../datamodel/user')
 
