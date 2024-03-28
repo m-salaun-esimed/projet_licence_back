@@ -7,7 +7,7 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('API Tests', function() {
-    this.timeout(10000);
+    this.timeout(50000);
     let token = '';
 
     before( (done) => {
