@@ -84,4 +84,30 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
+    app.delete('/deleteFavoriteByMovieIdApiUser', jwt.validateJWT, async (req, res) => {
+        try {
+            const movieidapi = req.body.movieidapi;
+            if (!movieidapi) {
+                return res.status(400).json({ message: 'L\'ID de l\'événement est manquant dans le corps de la requête.' });
+            }
+            await movieService.dao.deleteFavoriteByMovieIdApiUser(movieidapi, req.user);
+
+            res.status(200).json({ message: 'L\'événement a été supprimé avec succès.' });
+        } catch (error) {
+            console.error('Erreur lors de la suppression de l\'événement:', error);
+            res.status(500).json({ message: 'Une erreur s\'est produite lors de la suppression de l\'événement.' });
+        }
+    });
+
+    app.get("/searchMovies",jwt.validateJWT, async (req, res) => {
+        try {
+            const { query } = req.headers;
+            console.log("query " + query)
+            const movies = await movieService.dao.getMoviesBySearch(query, req.user);
+            res.json(movies);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
 }

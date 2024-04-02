@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  db-tpadmin:
+  postgresql:
     image: postgres:latest
     restart: always
     environment:
@@ -12,5 +12,33 @@ services:
       - data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+  nodejs:
+    depends_on:
+      - postgresql
+    container_name: nodejs
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CONNECTION_STRING=postgres://tpadmin:tpadmin@localhost:5432/tpadmin
+      - PORT=3333
+      - NODE_ENV=development
+    command: npm run run-server
+    networks:
+      - app-network
+
 volumes:
   data:
+
+networks:
+  app-network:
+    driver: bridge
+
+

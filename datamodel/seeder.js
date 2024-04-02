@@ -1,10 +1,9 @@
 module.exports =  (userService, movieService, categorieService, movieCategoryService) => {
-    console.log("seeder : avant return")
     return new Promise(async (resolve, reject) => {
     try {
-        console.log("debut du seeder")
         //------------------------------------DROP TABLE-----------------------------------------
-        await categorieService.dao.db.query(`
+
+        await movieService.dao.db.query(`
             DROP TABLE IF EXISTS FavoriteMovie;
         `);
 
@@ -26,7 +25,6 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         //------------------------------------CREATE TABLE-----------------------------------------
-        console.log("création table")
 
         await categorieService.dao.db.query(`
             CREATE TABLE IF NOT EXISTS Category (
@@ -83,7 +81,6 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         //-------------------------------------------CATEGORY--------------------------------------------
-        console.log("seeder category")
 
         const fetch = require('node-fetch');
         console.log("cat avant fecth")
@@ -134,7 +131,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
 
-        for(let i = 1; i < 10; i++){
+        for(let i = 1; i < 30; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
