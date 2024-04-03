@@ -10,10 +10,45 @@ module.exports = (app, userService, jwt) => {
         }
     });
 
-    app.get("/user/IdByLogin", async (req, res) => {
+    app.get("/user/IdByLogin", jwt.validateJWT, async (req, res) => {
         try {
             const { login } = req.headers
             const data = await userService.dao.getIdUser(login);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
+    app.get("/user/searchdisplaynames", jwt.validateJWT, async (req, res) => {
+        try {
+            const { recherche } = req.headers
+            const data = await userService.dao.searchdisplaynames(recherche);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
+    app.get("/user/IdByDisplayName", async (req, res) => {
+        try {
+            const { displayname } = req.headers
+            console.log(displayname)
+            const data = await userService.dao.getIdUserByDisplayName(displayname);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
+    app.get("/user/displaynamebyid", jwt.validateJWT, async (req, res) => {
+        try {
+            const { iduser } = req.headers
+            console.log(iduser)
+            const data = await userService.dao.getdisplaynamebyid(iduser);
             res.json(data);
         } catch (error) {
             console.error(error);

@@ -22,7 +22,37 @@ module.exports = class UserDao extends BaseDAO {
             throw error;
         }
     }
-    
+    async searchdisplaynames(recherche) {
+        try {
+            const query = "SELECT id, displayname FROM useraccount WHERE displayname ILIKE $1";
+
+            const result = await this.db.query(query, [`%${recherche}%`]);
+
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async getIdUserByDisplayName(displayName){
+        try {
+            const result = await this.db.query("SELECT id FROM useraccount WHERE displayname=$1", [ displayName ] );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getdisplaynamebyid(iduser){
+        try {
+            const result = await this.db.query("SELECT displayname FROM useraccount WHERE id=$1", [ iduser ] );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async insertUser(data){
         return super.insert(data);
     }

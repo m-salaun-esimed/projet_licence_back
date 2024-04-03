@@ -24,7 +24,7 @@ describe('API Tests', function() {
             userService.insertService(data).then( () =>
                 chai.request(app)
                     .post('/user/authenticate')
-                    .send({login: 'test', password: 'test'}) // TODO : remplacer par les champs attendus par votre route
+                    .send({login: 'test', password: 'test'})
                     .end((err, res) => {
                         res.should.have.status(200);
                         token = res.body.token;

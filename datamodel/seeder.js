@@ -15,6 +15,14 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             DROP TABLE IF EXISTS MovieCategory ;
         `);
 
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS friends_requests ;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS notifications ;
+        `);
+
         await userService.dao.db.query(`
             DROP TABLE IF EXISTS UserAccount;
         `);
@@ -41,8 +49,8 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         await userService.dao.db.query(`
             CREATE TABLE IF NOT EXISTS UserAccount (
                 id SERIAL PRIMARY KEY,
-                displayName VARCHAR(255) NOT NULL,
-                login VARCHAR(255) NOT NULL,
+                displayName VARCHAR(255) UNIQUE NOT NULL,
+                login VARCHAR(255) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 admin BOOLEAN NOT NULL
             );
@@ -87,6 +95,34 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 idMovieApi INT,
                 idUser INT,
                 FOREIGN KEY (idUser) REFERENCES UserAccount(id)
+            );
+        `);
+
+        await movieService.dao.db.query(`
+            CREATE TABLE IF NOT EXISTS notifications (
+            id SERIAL PRIMARY KEY,
+            receiver_id INT,
+            sender_id INT,
+            notification_type VARCHAR(50), -- Par exemple, 'friend_request'
+            notification_message TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            is_read BOOLEAN DEFAULT FALSE,
+            FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
+            FOREIGN KEY (sender_id) REFERENCES UserAccount(id)
+            );
+        `);
+        await movieService.dao.db.query(`
+            CREATE TABLE IF NOT EXISTS friends_requests (
+            id SERIAL PRIMARY KEY,
+            sender_id INT,
+            receiver_id INT,
+            status VARCHAR(20) DEFAULT 'pending', -- Peut être 'pending', 'accepted' ou 'rejected'
+            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            accepted_at TIMESTAMP,
+            notification_id INT,
+            FOREIGN KEY (sender_id) REFERENCES UserAccount(id),
+            FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
+            FOREIGN KEY (notification_id) REFERENCES notifications(id)
             );
         `);
 

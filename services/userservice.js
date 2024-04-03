@@ -17,7 +17,7 @@ module.exports = class UserService {
 
     insertService(data) {
         const dataHash = {
-            displayName : data.password,
+            displayName : data.displayName,
             login : data.login,
             password : this.hashPassword(data.password),
             admin : data.admin
