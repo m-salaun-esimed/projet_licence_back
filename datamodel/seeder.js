@@ -7,6 +7,10 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             DROP TABLE IF EXISTS FavoriteMovie;
         `);
 
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS movieAlreadySeen;
+        `);
+
         await categorieService.dao.db.query(`
             DROP TABLE IF EXISTS MovieCategory ;
         `);
@@ -77,6 +81,15 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             );
         `);
 
+        await movieService.dao.db.query(`
+            CREATE TABLE IF NOT EXISTS movieAlreadySeen (
+                id SERIAL PRIMARY KEY,
+                idMovieApi INT,
+                idUser INT,
+                FOREIGN KEY (idUser) REFERENCES UserAccount(id)
+            );
+        `);
+
         // ------------------------------------------SEEDER----------------------------------------------
 
 
@@ -140,12 +153,10 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
                 }
             };
-            console.log("avant requete")
             const responseMovie = await fetchMovie(urlMovie, optionsMovie);
             if (!responseMovie.ok) {
                 throw new Error('Erreur lors de la récupération des données depuis l\'API');
             }
-            console.log("apres requete")
 
             const jsonMovie = await responseMovie.json();
             const titles = jsonMovie.results.map(movie => movie.title);
@@ -156,7 +167,6 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             const poster_path = jsonMovie.results.map(movie => movie.poster_path);
             const backdrop_path = jsonMovie.results.map(movie => movie.backdrop_path);
             const vote_average = jsonMovie.results.map(movie => movie.vote_average);
-            console.log("backdrop_path " + vote_average, "vote_average :" + backdrop_path)
             await Promise.all(titles.map(async (movieTitle, index) => {
                 const dataMovie  = {
                     idapi: idapi[index],

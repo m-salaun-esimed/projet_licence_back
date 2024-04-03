@@ -5,6 +5,15 @@ module.exports = class MovieDao extends BaseDAO {
         super(db, namespace)
     }
 
+    async getAllMovieAlreadySeen(){
+        let tab = "moviealreadyseen"
+        try {
+            return  await this.db.query(`SELECT * FROM ${tab}`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getAllMovie(){
         let tab = "movie"
         try {
@@ -18,16 +27,6 @@ module.exports = class MovieDao extends BaseDAO {
         let tab = "movie"
         try {
             const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=${idmovieapi}`);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
-    }
-    async getAllFavoriteByIdUser(idUser){
-        let tab = "favoritemovie"
-        console.log("idUser " + idUser)
-        try {
-            const result = await this.db.query(`SELECT * FROM ${tab} WHERE iduser = ${idUser}`);
             return result.rows;
         } catch (error) {
             throw error;
@@ -57,52 +56,14 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
-    async insertFavorite(data){
-        let tablename = `favoritemovie`
-        const keys = Object.keys(data);
-        const values = Object.values(data);
-
-        const placeholders = keys.map((_, index) => `$${index + 1}`).join(', ');
-
-        const query = `INSERT INTO ${tablename} (${keys.join(', ')}) VALUES (${placeholders}) RETURNING id`;
-
-        return this.db.query(query, values)
-    }
-
-    async deleteFavoriteByMovieIdApiUser(idMovieApi, user) {
+    async getAllDejaVu(userId){
         try {
-            const query = `
-            DELETE FROM favoritemovie
-            WHERE idmovieapi = $1 AND iduser = $2
-        `;
-            const values = [idMovieApi, user.id];
-
-            await this.db.query(query, values);
-
-            console.log('L\'événement a été supprimé avec succès.');
-        } catch (error) {
-            console.error('Erreur lors de la suppression de l\'événement:', error);
-            throw error;
-        }
-    }
-
-    async getMoviesBySearch(query, user){
-        try {
-            const queryString = `
-            SELECT movie.*
-            FROM movie
-            JOIN favoritemovie fm ON movie.idapi = fm.idmovieapi
-            WHERE fm.iduser = $1 AND movie.name LIKE '%${query}%'
-        `;
-            const values = [user.id];
-
-            const result = await this.db.query(queryString, values);
+            const tab = "moviealreadyseen";
+            const queryString = `SELECT * FROM ${tab} WHERE iduser = ${userId}`;
+            const result = await this.db.query(queryString);
             return result.rows;
         } catch (error) {
             throw error;
         }
     }
-
-
-
 };
