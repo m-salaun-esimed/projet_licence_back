@@ -144,7 +144,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
 
-        for(let i = 1; i < 30; i++){
+        for(let i = 1; i < 10; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',

@@ -54,4 +54,73 @@ describe('API Tests', function() {
             });
     });
 
+    it('getRandomMovies', (done) => {
+        const categoryIds = '1,2,3';
+        chai.request(app)
+            .get('/getRandomMovies')
+            .set('Authorization', `Bearer ${token}`)
+            .set('categoryids', categoryIds)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+
+    it('getRandomMovies invalid token', (done) => {
+        const categoryIds = '1,2,3';
+        chai.request(app)
+            .get('/getRandomMovies')
+            .set('Authorization', `Bearer wrongtoken`)
+            .set('categoryids', categoryIds)
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('post favorite movie & getAllFavorite', (done) => {
+        const idMovieApi = 984324;
+        chai.request(app)
+            .post('/postFavoriteMovie')
+            .set('Authorization', `Bearer ${token}`)
+            .send({ idMovieApi})
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                chai.request(app)
+                    .get(`/getAllFavoriteByIdUser`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('array');
+                        const favoriteMovie = res.body.find(movie => movie.idmovieapi === idMovieApi);
+                        expect(favoriteMovie).to.exist;
+
+                        done();
+                    });
+            });
+    });
+
+    it('post alreadySeen movie & getAll', (done) => {
+        const idMovieApi = 984324;
+        chai.request(app)
+            .post('/postAlreadySeenMovie')
+            .set('Authorization', `Bearer ${token}`)
+            .send({ idMovieApi})
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                chai.request(app)
+                    .get(`/getAllAlreadySeenMovie`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('array');
+                        const alreadySeenMovie = res.body.find(movie => movie.idmovieapi === idMovieApi);
+                        expect(alreadySeenMovie).to.exist;
+
+                        done();
+                    });
+            });
+    });
 });

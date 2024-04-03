@@ -1,8 +1,7 @@
 module.exports = (app, favoriteService, jwt) => {
     app.get("/getAllFavoriteByIdUser", jwt.validateJWT, async (req, res) => {
         try {
-            let { iduser } = req.headers;
-            const data = await favoriteService.dao.getAllFavoriteByIdUser(iduser);
+            const data = await favoriteService.dao.getAllFavoriteByIdUser(req.user.id);
             res.json(data);
         } catch (error) {
             console.error(error);
@@ -12,15 +11,15 @@ module.exports = (app, favoriteService, jwt) => {
 
     app.post("/postFavoriteMovie", jwt.validateJWT,  async (req, res) => {
         try {
-            const { idMovieApi, idUser } = req.body;
-            if (idMovieApi === undefined || idUser === undefined) {
+            const { idMovieApi } = req.body;
+            if (idMovieApi === undefined || req.user === undefined) {
                 res.status(400).end();
                 return;
             }
 
             const data = {
                 idmovieapi : idMovieApi,
-                iduser: idUser
+                iduser: req.user.id
             };
             const response = await favoriteService.dao.insertFavorite(data);
             res.json(response);
