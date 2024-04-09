@@ -46,7 +46,7 @@ module.exports = class UserDao extends BaseDAO {
 
     async getdisplaynamebyid(iduser){
         try {
-            const result = await this.db.query("SELECT displayname FROM useraccount WHERE id=$1", [ iduser ] );
+            const result = await this.db.query("SELECT id,displayname FROM useraccount WHERE id=$1", [ iduser ] );
             return result.rows;
         } catch (error) {
             throw error;

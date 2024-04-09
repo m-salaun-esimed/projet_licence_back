@@ -3,13 +3,13 @@ const BaseDAO = require('./basedao')
 module.exports = class FavoriteDao extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
-        this.tablename = "favoritemovie"
+        this.tablename = "favorite"
     }
 
-    async getAllFavoriteByIdUser(idUser){
-        console.log("idUser " + idUser)
+    async getAllFavoriteByIdUser(idUser, Type){
+        console.log("idUser " + idUser + "type" + Type)
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = ${idUser}`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = $1`, [idUser]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -27,13 +27,13 @@ module.exports = class FavoriteDao extends BaseDAO {
         return this.db.query(query, values)
     }
 
-    async deleteFavoriteByMovieIdApiUser(idMovieApi, user) {
+    async deleteFavoriteByMovieIdApiUser(idApi, user) {
         try {
             const query = `
             DELETE FROM ${this.tablename}
-            WHERE idmovieapi = $1 AND iduser = $2
+            WHERE idapi = $1 AND iduser = $2
         `;
-            const values = [idMovieApi, user.id];
+            const values = [idApi, user.id];
 
             await this.db.query(query, values);
 
@@ -49,7 +49,7 @@ module.exports = class FavoriteDao extends BaseDAO {
             const queryString = `
             SELECT movie.*
             FROM movie
-            JOIN favoritemovie fm ON movie.idapi = fm.idmovieapi
+            JOIN favorite fm ON movie.idapi = fm.idapi
             WHERE fm.iduser = $1 AND movie.name LIKE '%${query}%'
         `;
             const values = [user.id];

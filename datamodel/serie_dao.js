@@ -1,44 +1,15 @@
-const BaseDAO = require('./basedao')
-const fetch = require('node-fetch');
+const BaseDAO = require('./basedao.js')
+const fetch = require("node-fetch");
 
-module.exports = class MovieDao extends BaseDAO {
+module.exports = class SerieDao extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
     }
 
-    async getAllMovieAlreadySeen(){
-        let tab = "moviealreadyseen"
+    async getSeriesByCategories(categoryIdsArray){
         try {
-            return  await this.db.query(`SELECT * FROM ${tab}`);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async getAllMovie(){
-        let tab = "movie"
-        try {
-            const result = await this.db.query(`SELECT * FROM ${tab}`);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async getMovieByIdMovieApi(idmovieapi){
-        let tab = "movie"
-        try {
-            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=${idmovieapi}`);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-
-    async getMoviesByCategories(categoryIds) {
-        try {
-            let tab = "movieCategory";
-            const queryString = `SELECT * FROM ${tab} WHERE idcategory IN (${categoryIds.join(',')})`;
+            let tab = "categoryparserie";
+            const queryString = `SELECT * FROM ${tab} WHERE idcategoryserie IN (${categoryIdsArray.join(',')})`;
             const result = await this.db.query(queryString);
             return result.rows;
         } catch (error) {
@@ -46,11 +17,22 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
-    async getMoviesByIds(idMovies) {
+    async getSeriesByIds(idSeries) {
         try {
-            const tab = "movie";
-            const queryString = `SELECT * FROM ${tab} WHERE id IN (${idMovies.join(',')})`;
-            const result = await this.db.query(queryString);
+            const tab = "serie";
+            const placeholders = idSeries.map((_, i) => `$${i + 1}`).join(',');
+            const queryString = `SELECT * FROM ${tab} WHERE id IN (${placeholders})`;
+            const result = await this.db.query(queryString, idSeries);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getSerieByIdSerieApi(idserieapi){
+        let tab = "serie"
+        try {
+            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=${idserieapi}`);
             return result.rows;
         } catch (error) {
             throw error;
@@ -60,7 +42,7 @@ module.exports = class MovieDao extends BaseDAO {
     async getAllDejaVu(userId){
         try {
             const tab = "alreadyseen";
-            const typecontenu = "film";
+            const typecontenu = "serie";
 
             const result = await this.db.query(`SELECT * FROM ${tab} WHERE iduser = $1 AND typecontenu = $2`, [userId, typecontenu]);
             return result.rows;
@@ -69,9 +51,10 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
-    async getPlatform(idmovieapi) {
+    async getPlatform(idserieapi) {
         try {
-            const url = `https://api.themoviedb.org/3/movie/${idmovieapi}/watch/providers`;
+            console.log("idserieapi : " + idserieapi)
+            const url = `https://api.themoviedb.org/3/tv/${idserieapi}/watch/providers`;
             const options = {
                 method: 'GET',
                 headers: {
@@ -88,5 +71,4 @@ module.exports = class MovieDao extends BaseDAO {
             throw error;
         }
     }
-
 };

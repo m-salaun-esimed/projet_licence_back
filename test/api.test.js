@@ -79,11 +79,11 @@ describe('API Tests', function() {
     });
 
     it('post favorite movie & getAllFavorite', (done) => {
-        const idMovieApi = 984324;
+        const idapi = 984324;
         chai.request(app)
             .post('/postFavoriteMovie')
             .set('Authorization', `Bearer ${token}`)
-            .send({ idMovieApi})
+            .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
@@ -93,7 +93,7 @@ describe('API Tests', function() {
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
-                        const favoriteMovie = res.body.find(movie => movie.idmovieapi === idMovieApi);
+                        const favoriteMovie = res.body.find(movie => movie.idapi === idapi);
                         expect(favoriteMovie).to.exist;
 
                         done();
@@ -102,11 +102,11 @@ describe('API Tests', function() {
     });
 
     it('post alreadySeen movie & getAll', (done) => {
-        const idMovieApi = 984324;
+        const idapi = 984324;
         chai.request(app)
             .post('/postAlreadySeenMovie')
             .set('Authorization', `Bearer ${token}`)
-            .send({ idMovieApi})
+            .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
@@ -116,7 +116,7 @@ describe('API Tests', function() {
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
-                        const alreadySeenMovie = res.body.find(movie => movie.idmovieapi === idMovieApi);
+                        const alreadySeenMovie = res.body.find(movie => movie.idapi === idapi);
                         expect(alreadySeenMovie).to.exist;
 
                         done();

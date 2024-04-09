@@ -29,7 +29,10 @@ module.exports = (app, movieService, jwt) => {
             const movies = await movieService.dao.getMoviesByCategories(categoryIdsArray);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
             const alreadySeenIds = response.map(movie => movie.idmovieapi);
-            console.log("movies : " + movies)
+
+            if (movies.length < 5){
+                return res.status(500).json({ error: 'Pas assez de film' });
+            }
 
             const randomMovies = await getRandomMovies(movies, 5, req.user.id);
             const idMovies = randomMovies.map(movie => movie.idmovie);
@@ -63,6 +66,17 @@ module.exports = (app, movieService, jwt) => {
 
         return randomMovies;
     }
+
+    app.get("/platform", jwt.validateJWT, async (req, res) => {
+        try {
+            const { idmovieapi } = req.headers;
+            const data = await movieService.dao.getPlatform(idmovieapi);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
 
     // async function getRandomMovies(movies, num, userId) {
     //     const randomMovies = [];

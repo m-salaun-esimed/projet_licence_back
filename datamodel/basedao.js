@@ -17,5 +17,4 @@ module.exports = class BaseDAO {
 
         return insertedId;
     }
-
 }

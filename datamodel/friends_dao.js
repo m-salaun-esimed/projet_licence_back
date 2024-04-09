@@ -30,7 +30,7 @@ module.exports = class FriendsDao extends BaseDAO {
         return this.db.query(query, values)
     }
 
-    async getFriendsRequests(idUser){
+    async getFriendsRequestsSend(idUser){
         try {
             const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE sender_id = ${idUser}`);
             return result.rows;
@@ -39,12 +39,115 @@ module.exports = class FriendsDao extends BaseDAO {
         }
     }
 
-    async getNotification(idUser){
+
+    async getFriendsRequestsReceived(idUser){
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablenameNotification} WHERE receiver_id = ${idUser}`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE receiver_id = ${idUser} AND status = 'pending'`);
             return result.rows;
         } catch (error) {
             throw error;
         }
     }
+
+    async getNotification(idnotification){
+        try {
+            const result = await this.db.query(`SELECT * FROM ${this.tablenameNotification} WHERE id = ${idnotification}`);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAmi(idUser){
+        try {
+            const friends  = await this.db.query(`
+            SELECT * FROM ${this.tablenameFriend} 
+            WHERE (sender_id = ${idUser} OR receiver_id = ${idUser}) 
+            AND status = 'accepted'
+        `);
+
+            const friendIdsSet = new Set();
+
+            friends.rows.forEach(friend => {
+                if (friend.sender_id === idUser) {
+                    friendIdsSet.add(friend.receiver_id);
+                } else {
+                    friendIdsSet.add(friend.sender_id);
+                }
+            });
+
+            const friendIds = Array.from(friendIdsSet);
+
+            console.log("IDs des amis de l'utilisateur :", friendIds);
+            return friendIds;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+
+
+    async validerDemande(friendrequestid){
+        const currentDate = new Date().toISOString();
+        try {
+            const result = await this.db.query(`
+                UPDATE ${this.tablenameFriend}
+                SET status = 'accepted', accepted_at = '${currentDate}'
+                WHERE id = ${friendrequestid}
+            `);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async rejeterDemande(friendrequestid){
+        const currentDate = new Date().toISOString();
+        try {
+            const result = await this.db.query(`
+                UPDATE ${this.tablenameFriend}
+                SET status = 'rejected', accepted_at = '${currentDate}'
+                WHERE id = ${friendrequestid}
+            `);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async validerNotification(notificationid){
+        const currentDate = new Date().toISOString();
+        try {
+            const result = await this.db.query(`
+                UPDATE ${this.tablenameNotification}
+                SET is_read = true
+                WHERE id = ${notificationid}
+            `);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async deleteFriend(idfriend, iduser){
+        console.log("iduser :" + iduser)
+        try {
+            const result1 = await this.db.query(`
+            DELETE FROM ${this.tablenameFriend}
+            WHERE sender_id = ${iduser} AND receiver_id = ${idfriend}
+        `);
+            const result2 = await this.db.query(`
+            DELETE FROM ${this.tablenameFriend}
+            WHERE sender_id = ${idfriend} AND receiver_id = ${iduser}
+        `);
+
+            return { result1, result2 };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 };

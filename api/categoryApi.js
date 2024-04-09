@@ -1,7 +1,7 @@
-module.exports = (app, categoryApi, jwt) => {
+module.exports = (app, categoryService, jwt) => {
     app.get("/movieCategory",jwt.validateJWT, async (req, res) => {
         try {
-            const data = await categoryApi.dao.getAllMovieCategory();
+            const data = await categoryService.dao.getAllMovieCategory();
             res.json(data);
         } catch (error) {
             console.error(error);
@@ -12,7 +12,7 @@ module.exports = (app, categoryApi, jwt) => {
     app.get("/movieCategorysByIdMovie",jwt.validateJWT, async (req, res) => {
         try {
             const { idMovie } = req.headers;
-            const data = await categoryApi.dao.getAllByIdMovie(idMovie);
+            const data = await categoryService.dao.getAllByIdMovie(idMovie);
             res.json(data);
         } catch (error) {
             console.error(error);

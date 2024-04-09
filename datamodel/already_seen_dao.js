@@ -3,7 +3,7 @@ const BaseDAO = require('./basedao')
 module.exports = class AlreadySeenMovie extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
-        this.tablename = "moviealreadyseen"
+        this.tablename = "alreadyseen"
     }
 
     async getAllAlreadySeenMovie(user){
@@ -26,13 +26,13 @@ module.exports = class AlreadySeenMovie extends BaseDAO {
         return this.db.query(query, values)
     }
 
-    async deleteAlreadySeenMovieByMovieIdApi(movieidapi, user){
+    async deleteAlreadySeenMovieByIdApi(idapi, user, typecontenu){
         try {
             const query = `
             DELETE FROM ${this.tablename}
-            WHERE idmovieapi = $1 AND iduser = $2
+            WHERE idapi = $1 AND iduser = $2 AND typecontenu = $3
         `;
-            const values = [movieidapi, user.id];
+            const values = [idapi, user.id, typecontenu];
 
             await this.db.query(query, values);
 
