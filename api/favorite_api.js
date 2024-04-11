@@ -46,16 +46,4 @@ module.exports = (app, favoriteService, jwt) => {
             res.status(500).json({ message: 'Une erreur s\'est produite lors de la suppression de l\'événement.' });
         }
     });
-
-    app.get("/searchMovies",jwt.validateJWT, async (req, res) => {
-        try {
-            const { query } = req.headers;
-            console.log("query " + query)
-            const movies = await favoriteService.dao.getMoviesBySearch(query, req.user);
-            res.json(movies);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
-        }
-    });
 }

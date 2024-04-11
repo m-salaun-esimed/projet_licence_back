@@ -64,9 +64,11 @@ module.exports = class SerieDao extends BaseDAO {
             };
             const response = await fetch(url, options);
             const data = await response.json();
-            const platformsForFrance = data.results.FR;
-
-            return platformsForFrance;
+            if (data.results.FR){
+                return data.results.FR
+            }else {
+                throw new Error('Les informations pour la France ne sont pas disponibles.');
+            }
         } catch (error) {
             throw error;
         }

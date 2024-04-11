@@ -78,6 +78,18 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
+    app.get("/searchMoviesSerie",jwt.validateJWT, async (req, res) => {
+        try {
+            const { query } = req.headers;
+            console.log("query " + query)
+            const movies = await movieService.dao.getMoviesSerieBySearch(query, req.user);
+            res.json(movies);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
     // async function getRandomMovies(movies, num, userId) {
     //     const randomMovies = [];
     //     const totalMovies = movies.length;

@@ -43,24 +43,4 @@ module.exports = class FavoriteDao extends BaseDAO {
             throw error;
         }
     }
-
-    async getMoviesBySearch(query, user){
-        try {
-            const queryString = `
-            SELECT movie.*
-            FROM movie
-            JOIN favorite fm ON movie.idapi = fm.idapi
-            WHERE fm.iduser = $1 AND movie.name LIKE '%${query}%'
-        `;
-            const values = [user.id];
-
-            const result = await this.db.query(queryString, values);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-
-
 };

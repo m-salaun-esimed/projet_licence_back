@@ -81,9 +81,33 @@ module.exports = class MovieDao extends BaseDAO {
             };
             const response = await fetch(url, options);
             const data = await response.json();
-            const platformsForFrance = data.results.FR;
+            if (data.results.FR){
+                return data.results.FR
+            }else {
+                throw new Error('Les informations pour la France ne sont pas disponibles.');
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 
-            return platformsForFrance;
+
+    async getMoviesSerieBySearch(query, user){
+        try {
+            const queryString = `
+        SELECT *
+        FROM (
+            SELECT *, 'movie' AS type
+            FROM movie
+            WHERE name LIKE '%${query}%'
+            UNION
+            SELECT *, 'serie' AS type
+            FROM serie
+            WHERE name LIKE '%${query}%'
+        ) AS search_result
+        `;
+            const result = await this.db.query(queryString);
+            return result.rows;
         } catch (error) {
             throw error;
         }
