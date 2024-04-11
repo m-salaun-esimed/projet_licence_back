@@ -1,6 +1,6 @@
 const BaseDAO = require('./basedao')
 
-module.exports = class CategorieDao extends BaseDAO {
+module.exports = class CategoryDao extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
     }
@@ -16,17 +16,17 @@ module.exports = class CategorieDao extends BaseDAO {
 
     async findByApiIdDao(idApi){
         try {
-            const result = await this.db.query(`SELECT id FROM ${this.tablename} WHERE idapi = ${idApi}`);
+            const result = await this.db.query(`SELECT id FROM ${this.tablename} WHERE idapi = $1`, [idApi]);
             return result.rows;
         } catch (error) {
             throw error;
         }
     }
 
-    async getAllByIdMovie(idMovie){
+    async getIdCategory(idMovie){
         let tab = "moviecategory"
         try {
-            const result = await this.db.query(`SELECT id FROM ${tab} WHERE idmovie = ${idMovie}`);
+            const result = await this.db.query(`SELECT id FROM ${tab} WHERE idmovie = $1`, [idMovie]);
             return result.rows;
         } catch (error) {
             throw error;

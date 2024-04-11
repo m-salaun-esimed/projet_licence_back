@@ -1,5 +1,5 @@
 module.exports = (app, favoriteService, jwt) => {
-    app.get("/getAllFavoriteByIdUser", jwt.validateJWT, async (req, res) => {
+    app.get("/favorite", jwt.validateJWT, async (req, res) => {
         try {
             const type = req.headers.type
             const data = await favoriteService.dao.getAllFavoriteByIdUser(req.user.id, type);
@@ -11,7 +11,7 @@ module.exports = (app, favoriteService, jwt) => {
         }
     });
 
-    app.post("/postFavoriteMovie", jwt.validateJWT,  async (req, res) => {
+    app.post("/favorite/post", jwt.validateJWT,  async (req, res) => {
         try {
             const { idapi, typecontenu } = req.body;
             if (idapi === undefined || req.user === undefined) {
@@ -32,7 +32,7 @@ module.exports = (app, favoriteService, jwt) => {
         }
     });
 
-    app.delete('/deleteFavoriteByMovieIdApiUser', jwt.validateJWT, async (req, res) => {
+    app.delete('/favorite/delete', jwt.validateJWT, async (req, res) => {
         try {
             const idapi = req.body.idapi;
             if (!idapi) {

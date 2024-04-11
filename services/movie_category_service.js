@@ -1,8 +1,8 @@
-const MovieCategoryDao = require("../datamodel/moviecategorydao.js")
+const MovieCategoryDao = require("../datamodel/movie_category_dao.js")
 
 module.exports = class MovieCategoryService {
     constructor(db) {
-        this.dao = new MovieCategoryDao(db, "MovieCategory")
+        this.dao = new MovieCategoryDao(db, "moviecategory")
     }
 
     insertService(data) {

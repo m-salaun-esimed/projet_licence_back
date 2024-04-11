@@ -32,7 +32,7 @@ module.exports = class FriendsDao extends BaseDAO {
 
     async getFriendsRequestsSend(idUser){
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE sender_id = ${idUser}`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE sender_id = $1`, [idUser]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -42,7 +42,7 @@ module.exports = class FriendsDao extends BaseDAO {
 
     async getFriendsRequestsReceived(idUser){
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE receiver_id = ${idUser} AND status = 'pending'`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablenameFriend} WHERE receiver_id = $1 AND status = 'pending'`, [idUser]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -51,7 +51,7 @@ module.exports = class FriendsDao extends BaseDAO {
 
     async getNotification(idnotification){
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablenameNotification} WHERE id = ${idnotification}`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablenameNotification} WHERE id = $1`, [idnotification]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -62,9 +62,9 @@ module.exports = class FriendsDao extends BaseDAO {
         try {
             const friends  = await this.db.query(`
             SELECT * FROM ${this.tablenameFriend} 
-            WHERE (sender_id = ${idUser} OR receiver_id = ${idUser}) 
+            WHERE (sender_id = $1 OR receiver_id = $1) 
             AND status = 'accepted'
-        `);
+        `, [idUser]);
 
             const friendIdsSet = new Set();
 
@@ -93,9 +93,9 @@ module.exports = class FriendsDao extends BaseDAO {
         try {
             const result = await this.db.query(`
                 UPDATE ${this.tablenameFriend}
-                SET status = 'accepted', accepted_at = '${currentDate}'
-                WHERE id = ${friendrequestid}
-            `);
+                SET status = 'accepted', accepted_at = $1
+                WHERE id = $2
+            `, [currentDate, friendrequestid]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -107,9 +107,9 @@ module.exports = class FriendsDao extends BaseDAO {
         try {
             const result = await this.db.query(`
                 UPDATE ${this.tablenameFriend}
-                SET status = 'rejected', accepted_at = '${currentDate}'
-                WHERE id = ${friendrequestid}
-            `);
+                SET status = 'rejected', accepted_at = $1
+                WHERE id = $2
+            `, [currentDate, friendrequestid]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -117,13 +117,12 @@ module.exports = class FriendsDao extends BaseDAO {
     }
 
     async validerNotification(notificationid){
-        const currentDate = new Date().toISOString();
         try {
             const result = await this.db.query(`
                 UPDATE ${this.tablenameNotification}
                 SET is_read = true
-                WHERE id = ${notificationid}
-            `);
+                WHERE id = $1
+            `, [notificationid]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -136,12 +135,12 @@ module.exports = class FriendsDao extends BaseDAO {
         try {
             const result1 = await this.db.query(`
             DELETE FROM ${this.tablenameFriend}
-            WHERE sender_id = ${iduser} AND receiver_id = ${idfriend}
-        `);
+            WHERE sender_id = $1 AND receiver_id = $2
+        `, [iduser, idfriend]);
             const result2 = await this.db.query(`
             DELETE FROM ${this.tablenameFriend}
-            WHERE sender_id = ${idfriend} AND receiver_id = ${iduser}
-        `);
+            WHERE sender_id = $1 AND receiver_id = $2
+        `, [idfriend, iduser]);
 
             return { result1, result2 };
         } catch (error) {

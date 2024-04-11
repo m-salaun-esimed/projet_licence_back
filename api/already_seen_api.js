@@ -1,8 +1,8 @@
 module.exports = (app, alreadySeenService, jwt) => {
-    app.get("/getAllAlreadySeenMovie", jwt.validateJWT, async (req, res) => {
+    app.get("/alreadySeenMovie", jwt.validateJWT, async (req, res) => {
         console.log("test")
         try {
-            const data = await alreadySeenService.dao.getAllAlreadySeenMovie(req.user);
+            const data = await alreadySeenService.dao.getAlreadySeenMovie(req.user);
             res.json(data);
         } catch (error) {
             console.error(error);
@@ -10,7 +10,7 @@ module.exports = (app, alreadySeenService, jwt) => {
         }
     });
 
-    app.post("/postAlreadySeenMovie", jwt.validateJWT,  async (req, res) => {
+    app.post("/alreadySeenMovie/post", jwt.validateJWT,  async (req, res) => {
         try {
             const { idapi, typecontenu } = req.body;
             console.log("idMovieApi" + idapi)
@@ -32,13 +32,13 @@ module.exports = (app, alreadySeenService, jwt) => {
         }
     });
 
-    app.delete('/deleteAlreadySeenMovieByMovieIdApiUser', jwt.validateJWT, async (req, res) => {
+    app.delete('/alreadySeenMovie/delete', jwt.validateJWT, async (req, res) => {
         try {
             const { idapi, typecontenu } = req.body;
             if (!idapi) {
                 return res.status(400).json({ message: 'L\'ID de l\'événement est manquant dans le corps de la requête.' });
             }
-            await alreadySeenService.dao.deleteAlreadySeenMovieByIdApi(idapi, req.user, typecontenu);
+            await alreadySeenService.dao.deleteAlreadySeenMovie(idapi, req.user, typecontenu);
 
             res.status(200).json({ message: 'L\'événement a été supprimé avec succès.' });
         } catch (error) {

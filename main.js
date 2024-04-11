@@ -16,10 +16,10 @@ const db = new pg.Pool({ connectionString: connectionString });
 const port = process.env.PORT || 3333;
 
 
-const UserService = require("./services/userservice");
-const MovieService = require("./services/movieservice")
-const CategorieService = require("./services/categorieservice")
-const MovieCategoryService = require("./services/moviecategoryservice")
+const UserService = require("./services/user_service");
+const MovieService = require("./services/movie_service")
+const CategorieService = require("./services/category_service")
+const MovieCategoryService = require("./services/movie_category_service")
 const FavoriteService= require("./services/favorite_service")
 const AlreadySeenService= require("./services/already_seen_service")
 const FriendsService= require("./services/friends_service")
@@ -39,9 +39,9 @@ const serieService = new SerieService(db)
 const categoryParSerieService = new CategoryParSerieService(db)
 
 const jwt = require('./jwt')(userService)
-require('./api/userApi')(app, userService, jwt)
-require('./api/movieApi')(app, movieService, jwt)
-require('./api/categoryApi')(app, categorieService, jwt)
+require('./api/user_api')(app, userService, jwt)
+require('./api/movie_api')(app, movieService, jwt)
+require('./api/category_movie_api')(app, categorieService, jwt)
 require('./api/favorite_api')(app, favoriteService, jwt)
 require('./api/already_seen_api')(app, alreadySeenService, jwt)
 require('./api/friends_api')(app, friendsService,userService, jwt)

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/datamodel/favorite_dao.js" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/datamodel/moviedao.js" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/datamodel/movie_dao.js" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/datamodel/seeder.js" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/datamodel/userdao.js" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/datamodel/user_dao.js" dialect="PostgreSQL" />
   </component>
 </project>

@@ -9,10 +9,12 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
-    app.get("/movieByIdMovieApi", jwt.validateJWT, async (req, res) => {
+    app.get("/movie/ByidMovieApi", jwt.validateJWT, async (req, res) => {
         try {
             let { idmovieapi } = req.headers;
-
+            if (idmovieapi === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
             const data = await movieService.dao.getMovieByIdMovieApi(idmovieapi);
             res.json(data);
         } catch (error) {
@@ -21,12 +23,15 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
-    app.get("/getRandomMovies",jwt.validateJWT, async (req, res) => {
+    app.get("/movie/randomMovies",jwt.validateJWT, async (req, res) => {
         try {
             const { categoryids } = req.headers;
+            if (categoryids === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
             const categoryIdsArray = categoryids.split(',').map(id => parseInt(id));
 
-            const movies = await movieService.dao.getMoviesByCategories(categoryIdsArray);
+            const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
             const alreadySeenIds = response.map(movie => movie.idmovieapi);
 
@@ -67,7 +72,7 @@ module.exports = (app, movieService, jwt) => {
         return randomMovies;
     }
 
-    app.get("/platform", jwt.validateJWT, async (req, res) => {
+    app.get("/movie/platform", jwt.validateJWT, async (req, res) => {
         try {
             const { idmovieapi } = req.headers;
             const data = await movieService.dao.getPlatform(idmovieapi);
@@ -78,9 +83,12 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
-    app.get("/searchMoviesSerie",jwt.validateJWT, async (req, res) => {
+    app.get("/movie/search",jwt.validateJWT, async (req, res) => {
         try {
             const { query } = req.headers;
+            if (query === undefined){
+                res.status(404).json({ error: 'La recherche est vide' });
+            }
             console.log("query " + query)
             const movies = await movieService.dao.getMoviesSerieBySearch(query, req.user);
             res.json(movies);

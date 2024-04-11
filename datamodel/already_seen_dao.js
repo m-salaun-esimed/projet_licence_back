@@ -1,14 +1,14 @@
 const BaseDAO = require('./basedao')
 
-module.exports = class AlreadySeenMovie extends BaseDAO {
+module.exports = class AlreadySeenMovieDao extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
         this.tablename = "alreadyseen"
     }
 
-    async getAllAlreadySeenMovie(user){
+    async getAlreadySeenMovie(user){
         try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = ${user.id}`);
+            const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = $1`, [user.id]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -26,7 +26,7 @@ module.exports = class AlreadySeenMovie extends BaseDAO {
         return this.db.query(query, values)
     }
 
-    async deleteAlreadySeenMovieByIdApi(idapi, user, typecontenu){
+    async deleteAlreadySeenMovie(idapi, user, typecontenu){
         try {
             const query = `
             DELETE FROM ${this.tablename}

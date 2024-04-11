@@ -32,7 +32,7 @@ module.exports = class SerieDao extends BaseDAO {
     async getSerieByIdSerieApi(idserieapi){
         let tab = "serie"
         try {
-            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=${idserieapi}`);
+            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=$1`, [idserieapi]);
             return result.rows;
         } catch (error) {
             throw error;

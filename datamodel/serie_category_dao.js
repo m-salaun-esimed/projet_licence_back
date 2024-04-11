@@ -6,20 +6,12 @@ module.exports = class SerieCategoryDao extends BaseDAO {
     }
 
     async findByApiIdDao(idApi){
-        try {
-            const result = await this.db.query(`SELECT id FROM ${this.tablename} WHERE idapi = ${idApi}`);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
+        const result = await this.db.query(`SELECT id FROM ${this.tablename} WHERE idapi = $1`, [idApi]);
+        return result.rows;
     }
 
     async getserieCategory(){
-        try {
-            const result = await this.db.query(`SELECT * FROM ${this.tablename}`);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
+        const result = await this.db.query(`SELECT * FROM ${this.tablename}`);
+        return result.rows;
     }
 };

@@ -13,6 +13,9 @@ module.exports = (app, userService, jwt) => {
     app.get("/user/IdByLogin", jwt.validateJWT, async (req, res) => {
         try {
             const { login } = req.headers
+            if(login === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
             const data = await userService.dao.getIdUser(login);
             res.json(data);
         } catch (error) {
@@ -47,6 +50,9 @@ module.exports = (app, userService, jwt) => {
     app.get("/user/displaynamebyid", jwt.validateJWT, async (req, res) => {
         try {
             const { iduser } = req.headers
+            if(iduser === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
             console.log(iduser)
             const data = await userService.dao.getdisplaynamebyid(iduser);
             res.json(data);
@@ -59,6 +65,7 @@ module.exports = (app, userService, jwt) => {
     app.post('/user/authenticate', (req, res) => {
         try{
             const { login, password } = req.body
+
             if ((login === undefined) || (password === undefined)) {
                 res.status(400).end()
                 return

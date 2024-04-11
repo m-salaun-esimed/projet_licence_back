@@ -1,7 +1,10 @@
 module.exports = async (app, serieService, jwt) => {
-    app.get("/getRandomSeries",jwt.validateJWT, async (req, res) => {
+    app.get("/serie/random",jwt.validateJWT, async (req, res) => {
     try {
         const {categoryids} = req.headers;
+        if(categoryids === undefined){
+            res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+        }
         const categoryIdsArray = categoryids.split(',').map(id => parseInt(id));
 
         const series = await serieService.dao.getSeriesByCategories(categoryIdsArray);
@@ -44,10 +47,12 @@ module.exports = async (app, serieService, jwt) => {
     }
 
 
-    app.get("/serieByIdSerieApi", jwt.validateJWT, async (req, res) => {
+    app.get("/serie/byidserieapi", jwt.validateJWT, async (req, res) => {
         try {
             let { idserieapi } = req.headers;
-
+            if(idserieapi === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
             const data = await serieService.dao.getSerieByIdSerieApi(idserieapi);
             res.json(data);
         } catch (error) {
@@ -59,6 +64,10 @@ module.exports = async (app, serieService, jwt) => {
     app.get("/serie/platform", jwt.validateJWT, async (req, res) => {
         try {
             const { idserieapi } = req.headers;
+            if(idserieapi === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
+
             const data = await serieService.dao.getPlatform(idserieapi);
             res.json(data);
         } catch (error) {

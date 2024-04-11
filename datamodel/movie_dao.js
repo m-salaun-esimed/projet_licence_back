@@ -27,7 +27,7 @@ module.exports = class MovieDao extends BaseDAO {
     async getMovieByIdMovieApi(idmovieapi){
         let tab = "movie"
         try {
-            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=${idmovieapi}`);
+            const result = await this.db.query(`SELECT * FROM ${tab} WHERE idapi=$1`, [idmovieapi]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -35,7 +35,7 @@ module.exports = class MovieDao extends BaseDAO {
     }
 
 
-    async getMoviesByCategories(categoryIds) {
+    async getMoviesByCategorys(categoryIds) {
         try {
             let tab = "movieCategory";
             const queryString = `SELECT * FROM ${tab} WHERE idcategory IN (${categoryIds.join(',')})`;
@@ -92,7 +92,7 @@ module.exports = class MovieDao extends BaseDAO {
     }
 
 
-    async getMoviesSerieBySearch(query, user){
+    async getMoviesSerieBySearch(query){
         try {
             const queryString = `
         SELECT *

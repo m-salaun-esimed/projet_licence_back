@@ -1,12 +1,15 @@
 module.exports = (app, friends_service, userService, jwt) => {
-    app.post("/addFriend", jwt.validateJWT,  async (req, res) => {
+    app.post("/friend/add", jwt.validateJWT,  async (req, res) => {
         try {
             const { idUser } = req.body;
-            if (idUser === undefined || req.user === undefined || idUser === req.user.id) {
-                res.status(400).end();
+            if (idUser === undefined || req.user === undefined) {
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
                 return;
             }
-
+            if (idUser === req.user.id) {
+                res.status(422).json({ error: 'Vous ne pouvez pas vous ajouter vous-même comme ami.' });
+                return;
+            }
             const dataNotification = {
                 sender_id : req.user.id,
                 receiver_id: idUser,
@@ -37,7 +40,7 @@ module.exports = (app, friends_service, userService, jwt) => {
     });
 
 
-    app.get("/getFriendsRequestsSend", jwt.validateJWT, async (req, res) => {
+    app.get("/friend/requestsSend", jwt.validateJWT, async (req, res) => {
         try {
             const data = await friends_service.dao.getFriendsRequestsSend(req.user.id);
             res.json(data);
@@ -47,7 +50,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.get("/getFriendsRequestsReceived", jwt.validateJWT, async (req, res) => {
+    app.get("/friend/requestsReceived", jwt.validateJWT, async (req, res) => {
         try {
             const data = await friends_service.dao.getFriendsRequestsReceived(req.user.id);
             res.json(data);
@@ -57,7 +60,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.get("/notificationbyid", jwt.validateJWT, async (req, res) => {
+    app.get("/friend/notification", jwt.validateJWT, async (req, res) => {
         try {
             const { idnotification } = req.headers;
             const data = await friends_service.dao.getNotification(idnotification);
@@ -68,7 +71,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.put("/valider", jwt.validateJWT, async (req, res) => {
+    app.put("/friend/validerNotification", jwt.validateJWT, async (req, res) => {
         try {
             const { friendrequestid, notificationid } = req.body;
             console.log("friendrequestid : " + friendrequestid)
@@ -84,7 +87,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.put("/rejeter", jwt.validateJWT, async (req, res) => {
+    app.put("/friend/rejeterNotification", jwt.validateJWT, async (req, res) => {
         try {
             const { friendrequestid, notificationid } = req.body;
             console.log("friendrequestid : " + friendrequestid)
@@ -100,7 +103,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.get("/ami", jwt.validateJWT, async (req, res) => {
+    app.get("/friend/friends", jwt.validateJWT, async (req, res) => {
         try {
             const friendIds  = await friends_service.dao.getAmi(req.user.id);
 
@@ -117,7 +120,7 @@ module.exports = (app, friends_service, userService, jwt) => {
         }
     });
 
-    app.delete("/ami", jwt.validateJWT, async (req, res) => {
+    app.delete("/friend/deleteFriends", jwt.validateJWT, async (req, res) => {
         try {
             console.log(req.body)
             const idfriend  = req.body.idfriend;

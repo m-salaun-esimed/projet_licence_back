@@ -104,7 +104,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
 
-        await movieService.dao.db.query(`
+        await movieCategoryService.dao.db.query(`
             CREATE TABLE IF NOT EXISTS MovieCategory (
                 id SERIAL PRIMARY KEY,
                 idMovie INT,
@@ -222,8 +222,8 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         const jsonSerieCategory = await responseSerieCategory.json();
         const genreNamesSerieCategory = jsonSerieCategory.genres.map(genre => genre.name);
         const genreIdsSerieCategory = jsonSerieCategory.genres.map(genre => genre.id);
-        console.log("genreNames" + genreNamesSerieCategory)
-        await Promise.all(genreNames.map(async (name, index) => {
+        console.log("genreNames serie" + genreNamesSerieCategory)
+        await Promise.all(genreNamesSerieCategory.map(async (name, index) => {
             const data = {
                 name,
                 idApi: genreIdsSerieCategory[index]
@@ -251,7 +251,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
 
-        for(let i = 1; i < 15; i++){
+        for(let i = 1; i < 10; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -292,8 +292,8 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 for (let j = 0; j < genreIds[index].length; j ++){
                     const categorieId = await categorieService.findByApiId(genreIds[index][j]);
                     const dataRelation = {
-                        idMovie: responseId,
-                        idCategory: categorieId[0].id
+                        idmovie: responseId,
+                        idcategory: categorieId[0].id
                     };
                     await movieCategoryService.insertService(dataRelation);
                 }
@@ -301,7 +301,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         }
         //-------------------------------------------Serie--------------------------------------------
-        for(let i = 1; i < 15; i++){
+        for(let i = 1; i < 10; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',

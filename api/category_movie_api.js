@@ -12,7 +12,7 @@ module.exports = (app, categoryService, jwt) => {
     app.get("/movieCategorysByIdMovie",jwt.validateJWT, async (req, res) => {
         try {
             const { idMovie } = req.headers;
-            const data = await categoryService.dao.getAllByIdMovie(idMovie);
+            const data = await categoryService.dao.getIdCategory(idMovie);
             res.json(data);
         } catch (error) {
             console.error(error);
