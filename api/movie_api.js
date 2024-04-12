@@ -33,8 +33,8 @@ module.exports = (app, movieService, jwt) => {
 
             const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
-            const alreadySeenIds = response.map(movie => movie.idmovieapi);
-
+            const alreadySeenIds = response.map(movie => movie.idapi);
+            console.log(alreadySeenIds)
             if (movies.length < 5){
                 return res.status(500).json({ error: 'Pas assez de film' });
             }
@@ -43,10 +43,10 @@ module.exports = (app, movieService, jwt) => {
             const idMovies = randomMovies.map(movie => movie.idmovie);
             const selectedMovies = await movieService.dao.getMoviesByIds(idMovies);
 
-
+            console.log(selectedMovies)
             for (let i = 0; i < selectedMovies.length; i++){
                 if (alreadySeenIds.includes(selectedMovies[i].idapi)) {
-                    return res.redirect('/getRandomMovies');
+                    return res.redirect('/movie/randomMovies');
                 }
             }
             res.json(selectedMovies);

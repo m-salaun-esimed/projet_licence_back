@@ -57,7 +57,7 @@ describe('API Tests', function() {
     it('getRandomMovies', (done) => {
         const categoryIds = '1,2,3';
         chai.request(app)
-            .get('/getRandomMovies')
+            .get('/movie/randomMovies')
             .set('Authorization', `Bearer ${token}`)
             .set('categoryids', categoryIds)
             .end((err, res) => {
@@ -69,7 +69,7 @@ describe('API Tests', function() {
     it('getRandomMovies invalid token', (done) => {
         const categoryIds = '1,2,3';
         chai.request(app)
-            .get('/getRandomMovies')
+            .get('/movie/randomMovies')
             .set('Authorization', `Bearer wrongtoken`)
             .set('categoryids', categoryIds)
             .end((err, res) => {
@@ -81,14 +81,14 @@ describe('API Tests', function() {
     it('post favorite movie & getAllFavorite', (done) => {
         const idapi = 984324;
         chai.request(app)
-            .post('/postFavoriteMovie')
+            .post('/favorite/post')
             .set('Authorization', `Bearer ${token}`)
             .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
                 chai.request(app)
-                    .get(`/getAllFavoriteByIdUser`)
+                    .get(`/favorite`)
                     .set('Authorization', `Bearer ${token}`)
                     .end((err, res) => {
                         res.should.have.status(200);
@@ -104,14 +104,14 @@ describe('API Tests', function() {
     it('post alreadySeen movie & getAll', (done) => {
         const idapi = 984324;
         chai.request(app)
-            .post('/postAlreadySeenMovie')
+            .post('/alreadySeenMovie/post')
             .set('Authorization', `Bearer ${token}`)
             .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
                 chai.request(app)
-                    .get(`/getAllAlreadySeenMovie`)
+                    .get(`/alreadySeenMovie`)
                     .set('Authorization', `Bearer ${token}`)
                     .end((err, res) => {
                         res.should.have.status(200);
