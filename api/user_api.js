@@ -136,4 +136,8 @@ module.exports = (app, userService, jwt) => {
         res.json({ status: 200, data: 'Token valide' });
     }, (req, res) => {
     });
+
+    app.get("/user/refreshtoken", jwt.validateJWT, (req, res) => {
+        res.json({'token': jwt.generateJWT(req.user.login)})
+    })
 }
