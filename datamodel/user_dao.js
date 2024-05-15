@@ -53,6 +53,15 @@ module.exports = class UserDao extends BaseDAO {
         }
     }
 
+    async getEstAdmin(iduser){
+        try {
+            const result = await this.db.query("SELECT admin FROM useraccount WHERE id=$1", [ iduser ] );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async insertUser(data){
         return super.insert(data);
     }

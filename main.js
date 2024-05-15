@@ -6,15 +6,14 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false })); // URLEncoded form data
-app.use(bodyParser.json()); // application/json
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
 const connectionString = process.env.CONNECTION_STRING;
 const db = new pg.Pool({ connectionString: connectionString });
 const port = process.env.PORT || 3333;
-
 
 const UserService = require("./services/user_service");
 const MovieService = require("./services/movie_service")

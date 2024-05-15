@@ -62,6 +62,25 @@ module.exports = (app, userService, jwt) => {
         }
     });
 
+    app.get("/user/refreshtoken", jwt.validateJWT, (req, res) => {
+        res.json({'token': jwt.generateJWT(req.user.login)})
+    });
+
+    app.get("/user/estAdmin", jwt.validateJWT, async (req, res) => {
+        try {
+            const { iduser } = req.headers
+            if(iduser === undefined){
+                res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
+            console.log(iduser)
+            const data = await userService.dao.getEstAdmin(iduser);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
     app.post('/user/authenticate', (req, res) => {
         try{
             const { login, password } = req.body
@@ -136,8 +155,4 @@ module.exports = (app, userService, jwt) => {
         res.json({ status: 200, data: 'Token valide' });
     }, (req, res) => {
     });
-
-    app.get("/user/refreshtoken", jwt.validateJWT, (req, res) => {
-        res.json({'token': jwt.generateJWT(req.user.login)})
-    })
 }

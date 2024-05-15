@@ -4,6 +4,7 @@ module.exports = class FavoriteDao extends BaseDAO {
     constructor(db, namespace) {
         super(db, namespace)
         this.tablename = "favorite"
+        this.nbr = 0
     }
 
     async getAllFavoriteByIdUser(idUser, Type){
