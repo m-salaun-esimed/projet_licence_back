@@ -113,4 +113,36 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
+    async deleteMovie(params) {
+        const tab = "movie";
+        let resultMovie;
+
+        try {
+            if (params.id) {
+                const result = await this.db.query(`SELECT id FROM ${tab} WHERE idapi = $1`, [params.id]);
+                if (result.rowCount === 0) {
+                    throw new Error('Film non trouvée.');
+                }
+                const id = result.rows[0].id;
+                await this.db.query(`DELETE FROM  moviecategory WHERE idmovie = $1`, [id]);
+                resultMovie = await this.db.query(`DELETE FROM ${tab} WHERE idapi = $1 RETURNING *`, [params.id]);
+            } else if (params.name) {
+                console.log(params.name)
+                const result = await this.db.query(`SELECT id FROM ${tab} WHERE name = $1`, [params.name]);
+                if (result.rowCount === 0) {
+                    throw new Error('Film non trouvée.');
+                }
+                const id = result.rows[0].id;
+                await this.db.query(`DELETE FROM  moviecategory WHERE idmovie = $1`, [id]);
+
+                resultMovie = await this.db.query(`DELETE FROM ${tab} WHERE name = $1 RETURNING *`, [params.name]);
+            }
+
+            return resultMovie;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
 };

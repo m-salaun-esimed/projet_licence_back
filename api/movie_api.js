@@ -120,4 +120,31 @@ module.exports = (app, movieService, jwt) => {
     //     console.log(randomMovies)
     //     return randomMovies;
     // }
+
+    app.delete("/movie", jwt.validateJWT, async (req, res) => {
+        try {
+            const { idmovieapi, name } = req.headers;
+
+            if (!idmovieapi && !name) {
+                return res.status(400).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
+
+            let result;
+            if (idmovieapi) {
+                result = await movieService.dao.deleteMovie({ id: idmovieapi });
+            } else if (name) {
+                console.log(name)
+                result = await movieService.dao.deleteMovie({ name: name });
+            }
+
+            if (!result || result.rowCount === 0) {
+                return res.status(404).json({ error: 'Film non trouvé.' });
+            }
+
+            res.status(200).json({ message: 'Film supprimé avec succès.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la suppression du Film.' });
+        }
+    });
 }

@@ -86,4 +86,13 @@ module.exports = class UserDao extends BaseDAO {
                 .then(res => resolve(res.rows[0]) )
                 .catch(e => reject(e)))
     }
+
+    async deleteUser(email){
+        try {
+            const result = await this.db.query("DELETE  FROM useraccount WHERE login=$1", [ email ] );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
 };

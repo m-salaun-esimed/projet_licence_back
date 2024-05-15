@@ -155,4 +155,24 @@ module.exports = (app, userService, jwt) => {
         res.json({ status: 200, data: 'Token valide' });
     }, (req, res) => {
     });
+
+    app.delete("/user", jwt.validateJWT, async (req, res) => {
+        try {
+            const { login } = req.headers;
+
+            if (!login) {
+                return res.status(400).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
+
+            let result = await userService.dao.deleteUser(login);
+            if (!result || result.rowCount === 0) {
+                return res.status(404).json({ error: 'User non trouvée.' });
+            }
+
+            res.status(200).json({ message: 'User supprimée avec succès.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la suppression du User.' });
+        }
+    });
 }

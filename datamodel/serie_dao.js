@@ -73,4 +73,36 @@ module.exports = class SerieDao extends BaseDAO {
             throw error;
         }
     }
+
+    async deleteSerie(params) {
+        const tab = "serie";
+        let resultSerie;
+
+        try {
+            if (params.id) {
+                const result = await this.db.query(`SELECT id FROM ${tab} WHERE idapi = $1`, [params.id]);
+                if (result.rowCount === 0) {
+                    throw new Error('Série non trouvée.');
+                }
+                const id = result.rows[0].id;
+                await this.db.query(`DELETE FROM categoryparserie WHERE idserie = $1`, [id]);
+                resultSerie = await this.db.query(`DELETE FROM ${tab} WHERE idapi = $1 RETURNING *`, [params.id]);
+            } else if (params.name) {
+                console.log(params.name)
+                const result = await this.db.query(`SELECT id FROM ${tab} WHERE name = $1`, [params.name]);
+                if (result.rowCount === 0) {
+                    throw new Error('Série non trouvée.');
+                }
+                const id = result.rows[0].id;
+                await this.db.query(`DELETE FROM categoryparserie WHERE idserie = $1`, [id]);
+
+                resultSerie = await this.db.query(`DELETE FROM ${tab} WHERE name = $1 RETURNING *`, [params.name]);
+            }
+
+            return resultSerie;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 };

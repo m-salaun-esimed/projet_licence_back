@@ -75,4 +75,31 @@ module.exports = async (app, serieService, jwt) => {
             res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
         }
     });
+
+    app.delete("/serie", jwt.validateJWT, async (req, res) => {
+        try {
+            const { idserieapi, name } = req.headers;
+
+            if (!idserieapi && !name) {
+                return res.status(400).json({ error: 'Erreur dans les données envoyées à la requête' });
+            }
+
+            let result;
+            if (idserieapi) {
+                result = await serieService.dao.deleteSerie({ id: idserieapi });
+            } else if (name) {
+                console.log(name)
+                result = await serieService.dao.deleteSerie({ name: name });
+            }
+
+            if (!result || result.rowCount === 0) {
+                return res.status(404).json({ error: 'Série non trouvée.' });
+            }
+
+            res.status(200).json({ message: 'Série supprimée avec succès.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la suppression de la série.' });
+        }
+    });
 }
