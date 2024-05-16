@@ -175,4 +175,25 @@ module.exports = (app, userService, jwt) => {
             res.status(500).json({ error: 'Erreur lors de la suppression du User.' });
         }
     });
+
+    app.put("/user/pwd", jwt.validateJWT, async (req, res) => {
+        try {
+            const { login, pwd } = req.body;
+
+            if (!login || !pwd) {
+                return res.status(400).json({ error: 'login or pwd must be provided for updating.' });
+            }
+
+            let updatedSeries;
+            updatedSeries = await userService.updatePwd(login, pwd);
+            if (!updatedSeries) {
+                return res.status(404).json({ error: 'user not found.' });
+            }
+
+            res.status(200).json({ message: 'Mot de passe changé avec sucess.', series: updatedSeries });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la mise à jour du mot de passe.' });
+        }
+    });
 }

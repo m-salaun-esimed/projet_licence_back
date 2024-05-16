@@ -95,4 +95,16 @@ module.exports = class UserDao extends BaseDAO {
             throw error;
         }
     }
+
+    async updatePwd(login, pwd){
+        try {
+            let tab = "useraccount"
+            let resultSerie;
+            resultSerie = await this.db.query(`UPDATE ${tab} SET  password = $1 WHERE login = $2
+                    `, [pwd, login]);
+            return resultSerie;
+        } catch (error) {
+            throw error;
+        }
+    }
 };

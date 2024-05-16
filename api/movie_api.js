@@ -147,4 +147,38 @@ module.exports = (app, movieService, jwt) => {
             res.status(500).json({ error: 'Erreur lors de la suppression du Film.' });
         }
     });
+
+    app.put("/movie", jwt.validateJWT, async (req, res) => {
+        try {
+            const { id, name, newName, overview } = req.body;
+
+            if (!id && !name) {
+                return res.status(400).json({ error: 'ID or name must be provided for updating.' });
+            }
+
+            const updateObject = {};
+            if (newName) {
+                updateObject.name = newName;
+            }
+            if (overview) {
+                updateObject.overview = overview;
+            }
+            let updatedSeries;
+            if (id) {
+                updatedSeries = await movieService.dao.updateMovie({ id: id }, updateObject);
+            } else if (name) {
+                console.log(name)
+                updatedSeries =  await movieService.dao.updateMovie({ name: name }, updateObject);
+            }
+
+            if (!updatedSeries) {
+                return res.status(404).json({ error: 'Série not found.' });
+            }
+
+            res.status(200).json({ message: 'Film mise à jour avec succès.', series: updatedSeries });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la mise à jour du Film.' });
+        }
+    });
 }

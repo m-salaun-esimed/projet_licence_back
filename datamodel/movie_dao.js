@@ -145,4 +145,39 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
+    async updateMovie(params, updateObject) {
+        const tab = "movie";
+        console.log(params)
+        let resultMovie;
+        try {
+            if (params.id) {
+                if (updateObject.name && !updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  name = $1 WHERE idapi = $2`, [updateObject.name, params.id]);
+                }
+                else if (!updateObject.name && updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  overview = $1 WHERE idapi = $2`, [updateObject.overview, params.id]);
+                }
+                else if (updateObject.name && updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  overview = $1, name = $2 WHERE idapi = $3
+                    `, [updateObject.overview, updateObject.name, params.id]);
+                }
+            } else if (params.name) {
+                if (updateObject.name && !updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  name = $1 WHERE name = $2`, [updateObject.name, params.name]);
+                }
+                else if (!updateObject.name && updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  overview = $1 WHERE name = $2`, [updateObject.overview, params.name]);
+                }
+                else if (updateObject.name && updateObject.overview){
+                    resultMovie = await this.db.query(`UPDATE ${tab} SET  overview = $1, name = $2 WHERE name = $3
+                    `, [updateObject.overview, updateObject.name, params.name]);
+                }
+            }
+
+            return resultMovie;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 };

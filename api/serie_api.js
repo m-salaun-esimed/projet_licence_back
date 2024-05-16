@@ -102,4 +102,38 @@ module.exports = async (app, serieService, jwt) => {
             res.status(500).json({ error: 'Erreur lors de la suppression de la série.' });
         }
     });
+
+    app.put("/serie", jwt.validateJWT, async (req, res) => {
+        try {
+            const { id, name, newName, overview } = req.body;
+
+            if (!id && !name) {
+                return res.status(400).json({ error: 'ID or name must be provided for updating.' });
+            }
+
+            const updateObject = {};
+            if (newName) {
+                updateObject.name = newName;
+            }
+            if (overview) {
+                updateObject.overview = overview;
+            }
+            let updatedSeries;
+            if (id) {
+                updatedSeries = await serieService.dao.updateSerie({ id: id }, updateObject);
+            } else if (name) {
+                console.log(name)
+                updatedSeries =  await serieService.dao.updateSerie({ name: name }, updateObject);
+            }
+
+            if (!updatedSeries) {
+                return res.status(404).json({ error: 'Série not found.' });
+            }
+
+            res.status(200).json({ message: 'Série mise à jour avec succès.', series: updatedSeries });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
+        }
+    });
 }

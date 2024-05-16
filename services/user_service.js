@@ -38,4 +38,9 @@ module.exports = class UserService {
             return true;
         }
     }
+
+    async updatePwd(login, pwd){
+        pwd = this.hashPassword(pwd);
+        return this.dao.updatePwd(login, pwd)
+    }
 }
