@@ -178,14 +178,14 @@ module.exports = (app, userService, jwt) => {
 
     app.put("/user/pwd", jwt.validateJWT, async (req, res) => {
         try {
-            const { login, pwd } = req.body;
+            const { login, mdp } = req.body;
 
-            if (!login || !pwd) {
+            if (!login || !mdp) {
                 return res.status(400).json({ error: 'login or pwd must be provided for updating.' });
             }
 
             let updatedSeries;
-            updatedSeries = await userService.updatePwd(login, pwd);
+            updatedSeries = await userService.updatePwd(login, mdp);
             if (!updatedSeries) {
                 return res.status(404).json({ error: 'user not found.' });
             }
