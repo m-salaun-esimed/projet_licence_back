@@ -3,16 +3,16 @@
     "dependencies": {
         "bcrypt": "^4.0.1",
         "body-parser": "^1.19.0",
+        "chai": "^4.4.1",
+        "chai-http": "^4.4.0",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
+        "mocha": "^10.4.0",
         "morgan": "^1.10.0",
         "node-fetch": "^2.7.0",
-        "pg": "^8.11.3",
-        "mocha": "^10.4.0",
-        "chai": "^4.4.1",
-        "chai-http": "^4.4.0"
+        "pg": "^8.11.3"
     },
     "scripts": {
         "run": "node main.js",

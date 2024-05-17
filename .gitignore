@@ -4,3 +4,4 @@ package-lock.json
 .idea
 .log
 
+CONNECTION_STRING=postgres://tpadmin:tpadmin@localhost:5432/tpadmin
