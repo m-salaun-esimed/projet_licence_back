@@ -6,7 +6,7 @@ module.exports = class AlreadySeenMovieDao extends BaseDAO {
         this.tablename = "alreadyseen"
     }
 
-    async getAlreadySeenMovie(user){
+    async getAlreadySeenMovie(user) {
         try {
             const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = $1`, [user.id]);
             return result.rows;
