@@ -55,7 +55,7 @@ describe('API Tests', function() {
     });
 
     it('getRandomMovies', (done) => {
-        const categoryIds = '1,2,3';
+        const categoryIds = '1';
         chai.request(app)
             .get('/movie/randomMovies')
             .set('Authorization', `Bearer ${token}`)
