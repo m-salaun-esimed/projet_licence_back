@@ -5,52 +5,52 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Favorite;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS AlreadySeen;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS MovieCategory ;
-        `);
-
-        await categoryParSerieService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryparserie ;
-        `);
-
-        await serieCategoryService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryserie;
-        `);
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS friends_requests ;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS notifications ;
-        `);
-
-        await userService.dao.db.query(`
-            DROP TABLE IF EXISTS UserAccount;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Movie;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS Category;
-        `);
-
-        await serieService.dao.db.query(`
-            DROP TABLE IF EXISTS serie;
-        `);
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Favorite;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS AlreadySeen;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS MovieCategory ;
+        // `);
+        //
+        // await categoryParSerieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryparserie ;
+        // `);
+        //
+        // await serieCategoryService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryserie;
+        // `);
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS friends_requests ;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS notifications ;
+        // `);
+        //
+        // await userService.dao.db.query(`
+        //     DROP TABLE IF EXISTS UserAccount;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Movie;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Category;
+        // `);
+        //
+        // await serieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS serie;
+        // `);
         // ------------------------------------CREATE TABLE-----------------------------------------
 
         await categorieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS Category (
+            CREATE TABLE Category (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 idApi INT
@@ -58,7 +58,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await serieCategoryService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS categoryserie (
+            CREATE TABLE categoryserie (
             id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             idApi INT
@@ -66,7 +66,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await userService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS UserAccount (
+            CREATE TABLE UserAccount (
                 id SERIAL PRIMARY KEY,
                 displayName VARCHAR(255) UNIQUE NOT NULL,
                 login VARCHAR(255) UNIQUE NOT NULL,
@@ -76,7 +76,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await movieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS Movie (
+            CREATE TABLE Movie (
                 id SERIAL PRIMARY KEY,
                 idApi INT NOT NULL,
                 name VARCHAR(255) NOT NULL,
@@ -89,7 +89,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await serieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS serie (
+            CREATE TABLE serie (
             id SERIAL PRIMARY KEY,
             idApi INT NOT NULL,
             name VARCHAR(255) NOT NULL,
@@ -103,7 +103,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         await movieCategoryService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS MovieCategory (
+            CREATE TABLE MovieCategory (
                 id SERIAL PRIMARY KEY,
                 idMovie INT,
                 idCategory INT,
@@ -113,7 +113,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await categoryParSerieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS categoryparserie (
+            CREATE TABLE  categoryparserie (
             id SERIAL PRIMARY KEY,
             idSerie INT,
             idCategorySerie INT,
@@ -123,7 +123,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await movieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS Favorite (
+            CREATE TABLE Favorite (
                 id SERIAL PRIMARY KEY,
                 idapi INT,
                 idUser INT,
@@ -133,7 +133,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await movieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS AlreadySeen (
+            CREATE TABLE  AlreadySeen (
                 id SERIAL PRIMARY KEY,
                 idApi INT,
                 idUser INT,
@@ -143,7 +143,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await movieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS notifications (
+            CREATE TABLE  notifications (
             id SERIAL PRIMARY KEY,
             receiver_id INT,
             sender_id INT,
@@ -156,7 +156,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             );
         `);
         await movieService.dao.db.query(`
-            CREATE TABLE IF NOT EXISTS friends_requests (
+            CREATE TABLE friends_requests (
             id SERIAL PRIMARY KEY,
             sender_id INT,
             receiver_id INT,
@@ -355,9 +355,14 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         }
         resolve()
-    } catch (e) {
-        console.log(e)
-        reject(e)
+    }catch (error) {
+        if (error.code === '42P07') {  // Code for "table already exists" in PostgreSQL
+            console.log("Table already exists.");
+            resolve()
+        } else {
+            console.error("An error occurred:", error);
+            throw error;
+        }
     }
     })
 };
