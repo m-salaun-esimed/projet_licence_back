@@ -5,3 +5,6 @@ package-lock.json
 .log
 
 CONNECTION_STRING=postgres://tpadmin:tpadmin@localhost:5432/tpadmin
+
+# Local Netlify folder
+.netlify

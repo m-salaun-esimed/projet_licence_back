@@ -4,7 +4,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     return new Promise(async (resolve, reject) => {
     try {
         //------------------------------------DROP TABLE-----------------------------------------
-
+        //
         // await movieService.dao.db.query(`
         //     DROP TABLE IF EXISTS Favorite;
         // `);
