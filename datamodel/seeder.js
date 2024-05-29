@@ -231,10 +231,10 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         //-------------------------------------------USER--------------------------------------------
 
-        let listDeUser = ["Matthieu", "Leana", "Malo", "Carine", "Franck"]
-        let listDeLogin = ["Matthieu@gmail.com", "Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
+        let listDeUser = [ "Leana", "Malo", "Carine", "Franck"]
+        let listDeLogin = ["Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             const data = {
                 displayName: listDeUser[i],
                 login: listDeLogin[i],
@@ -243,6 +243,14 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             };
             await userService.insertService(data);
         }
+
+        const data = {
+            displayName: "Matthieu",
+            login: "Matthieu@gmail.com",
+            password: "azerty",
+            admin: true
+        };
+        await userService.insertService(data);
 
         //-------------------------------------------MOVIE--------------------------------------------
 
