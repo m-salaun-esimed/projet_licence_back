@@ -1,6 +1,6 @@
 module.exports = (app, alreadySeenService, jwt) => {
     app.get("/alreadySeenMovie", jwt.validateJWT, async (req, res) => {
-        console.log("test")
+        console.log("testt")
         try {
             const data = await alreadySeenService.dao.getAlreadySeenMovie(req.user);
             res.json(data);
