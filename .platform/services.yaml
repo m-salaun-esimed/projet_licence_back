@@ -1,5 +1,3 @@
-Example file: services.yaml
-
 # The name given to the PostgreSQL service (lowercase alphanumeric only).
 postgresql:
   # The type of your service (postgresql), which uses the format
