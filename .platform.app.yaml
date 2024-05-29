@@ -33,4 +33,4 @@ relationships:
 
 web:
   commands:
-    start: "node index.js"
+    start: "node main.js"
