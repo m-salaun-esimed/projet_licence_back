@@ -1,5 +1,4 @@
 const MovieDao = require("../datamodel/movie_dao.js")
-const bcrypt = require('bcrypt')
 
 module.exports = class MovieService {
     constructor(db) {

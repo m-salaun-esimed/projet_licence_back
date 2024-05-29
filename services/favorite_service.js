@@ -1,5 +1,4 @@
 const FavoriteDao = require("../datamodel/favorite_dao.js")
-const bcrypt = require('bcrypt')
 
 module.exports = class FavoriteService {
     constructor(db) {

@@ -1,5 +1,5 @@
 const UserDao = require("../datamodel/user_dao.js")
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 module.exports = class UserService {
     constructor(db) {

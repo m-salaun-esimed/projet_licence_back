@@ -1,5 +1,4 @@
 const FriendsDao = require("../datamodel/friends_dao.js")
-const bcrypt = require('bcrypt')
 
 module.exports = class FriendsService {
     constructor(db) {

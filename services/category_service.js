@@ -1,5 +1,4 @@
 const CategorieDao = require("../datamodel/category_movie_dao.js")
-const bcrypt = require('bcrypt')
 
 module.exports = class CategorieService {
     constructor(db) {
