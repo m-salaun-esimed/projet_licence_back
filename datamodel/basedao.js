@@ -17,4 +17,16 @@ module.exports = class BaseDAO {
 
         return insertedId;
     }
+
+    async insertPlatform(data){
+        const tablename = "platform"
+        const keys = Object.keys(data);
+        const values = Object.values(data);
+
+        const placeholders = keys.map((_, index) => `$${index + 1}`).join(', ');
+
+        const query = `INSERT INTO ${tablename} (${keys.join(', ')}) VALUES (${placeholders})`;
+        return this.db.query(query, values)
+
+    }
 }

@@ -48,6 +48,10 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             DROP TABLE IF EXISTS serie;
         `);
 
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS platform;
+        `);
+
         // ------------------------------------CREATE TABLE-----------------------------------------
 
         await categorieService.dao.db.query(`
@@ -168,6 +172,14 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             FOREIGN KEY (sender_id) REFERENCES UserAccount(id),
             FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
             FOREIGN KEY (notification_id) REFERENCES notifications(id)
+            );
+        `);
+
+        await movieService.dao.db.query(`
+            CREATE TABLE platform (
+            id SERIAL PRIMARY KEY,
+            idapi INT,
+            name VARCHAR(50)
             );
         `);
 
@@ -452,6 +464,19 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         //         }
         //     }
         // }
+        //------------------------------------platform--------------------------------------------
+
+        const platformName = ["Amazon Video","Netflix","Apple TV","Disney Plus","Canal+","Canal VOD", "Canal+ Séries", "Crunchyroll"];
+        const idapi = [15,5,3,33, 40, 19,107, 30];
+
+        for(let i = 0; i < platformName.length; i++){
+            const dataPlatform = {
+                idapi : idapi[i],
+                name : platformName[i]
+            }
+            await movieService.insertPlatform(dataPlatform);
+        }s
+
         resolve()
     }catch (error) {
         if (error.code === '42P07') {  // Code for "table already exists" in PostgreSQL

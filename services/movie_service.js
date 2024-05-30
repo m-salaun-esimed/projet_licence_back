@@ -9,4 +9,8 @@ module.exports = class MovieService {
         const insertedId = await this.dao.insert(data);
         return insertedId;
     }
+
+    async insertPlatform(data){
+        return await this.dao.insertPlatform(data);
+    }
 }
