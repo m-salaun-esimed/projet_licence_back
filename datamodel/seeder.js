@@ -5,48 +5,48 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Favorite;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS AlreadySeen;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS MovieCategory ;
-        // `);
-        //
-        // await categoryParSerieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryparserie ;
-        // `);
-        //
-        // await serieCategoryService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryserie;
-        // `);
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS friends_requests ;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS notifications ;
-        // `);
-        //
-        // await userService.dao.db.query(`
-        //     DROP TABLE IF EXISTS UserAccount;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Movie;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Category;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS serie;
-        // `);
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Favorite;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS AlreadySeen;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS MovieCategory ;
+        `);
+
+        await categoryParSerieService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryparserie ;
+        `);
+
+        await serieCategoryService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryserie;
+        `);
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS friends_requests ;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS notifications ;
+        `);
+
+        await userService.dao.db.query(`
+            DROP TABLE IF EXISTS UserAccount;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Movie;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS Category;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS serie;
+        `);
         // ------------------------------------CREATE TABLE-----------------------------------------
 
         await categorieService.dao.db.query(`
@@ -257,7 +257,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
 
-        for(let i = 1; i < 20; i++){
+        for(let i = 1; i < 40; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -303,10 +303,58 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                     await movieCategoryService.insertService(dataRelation);
                 }
             }));
-
         }
+
+        // for(let i = 1; i < 500; i++){
+        //     const urlMovie = `https://api.themoviedb.org/3/movie/${i}?language=fr-FR`;
+        //         const optionsMovie = {
+        //             method: 'GET',
+        //             headers: {
+        //                 accept: 'application/json',
+        //                 Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
+        //             }
+        //         };
+        //         const responseMovie = await fetchMovie(urlMovie, optionsMovie);
+        //         console.log(responseMovie)
+        //         if (responseMovie.status === 200) {
+        //             console.log(i)
+        //             console.log(responseMovie)
+        //                 const jsonMovie = await responseMovie.json();
+        //                 const titles =  jsonMovie.title;
+        //                 // const dates = jsonMovie.results.map(movie => movie.release_date);
+        //                 const overviews = jsonMovie.overview;
+        //                 const genreIds = jsonMovie.genres;
+        //                 const idapi = jsonMovie.id;
+        //                 const poster_path = jsonMovie.poster_path;
+        //                 const backdrop_path = jsonMovie.backdrop_path;
+        //                 const vote_average = jsonMovie.vote_average;
+        //                 console.log(jsonMovie)
+        //
+        //                 const dataMovie  = {
+        //                     idapi: idapi,
+        //                     name: titles,
+        //                     namefilmmaker: "nameFilmMaker",
+        //                     overview: overviews,
+        //                     note: vote_average,
+        //                     poster_path: poster_path,
+        //                     backdrop_path: backdrop_path
+        //                 }
+        //                 console.log(dataMovie)
+        //                 const responseId = await movieService.insertService(dataMovie);
+        //                 console.log(responseId)
+        //                 console.log(genreIds.length)
+        //                     for (let j = 0; j < genreIds.length; j ++){
+        //                         const categorieId = await categorieService.findByApiId(genreIds[j].id);
+        //                         const dataRelation = {
+        //                             idmovie: responseId,
+        //                             idcategory: categorieId[0].id
+        //                         };
+        //                         await movieCategoryService.insertService(dataRelation);
+        //                     }
+        //         }
+        // }
         //-------------------------------------------Serie--------------------------------------------
-        for(let i = 1; i < 20; i++){
+        for(let i = 1; i < 40; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
@@ -354,6 +402,55 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             }));
 
         }
+
+        // for(let i = 1; i < 500; i++){
+        //     const urlMovie = `https://api.themoviedb.org/3/tv/${i}?language=fr-FR`;
+        //     const optionsMovie = {
+        //         method: 'GET',
+        //         headers: {
+        //             accept: 'application/json',
+        //             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
+        //         }
+        //     };
+        //     const responseMovie = await fetchMovie(urlMovie, optionsMovie);
+        //     console.log(responseMovie)
+        //     if (responseMovie.status === 200) {
+        //         console.log(i)
+        //         console.log(responseMovie)
+        //         const jsonMovie = await responseMovie.json();
+        //         const titles =  jsonMovie.name;
+        //         // const dates = jsonMovie.results.map(movie => movie.release_date);
+        //         const overviews = jsonMovie.overview;
+        //         const genreIds = jsonMovie.genres;
+        //         const idapi = jsonMovie.id;
+        //         const poster_path = jsonMovie.poster_path;
+        //         const backdrop_path = jsonMovie.backdrop_path;
+        //         const vote_average = jsonMovie.vote_average;
+        //         console.log(jsonMovie)
+        //
+        //         const dataMovie  = {
+        //             idapi: idapi,
+        //             name: titles,
+        //             namefilmmaker: "nameFilmMaker",
+        //             overview: overviews,
+        //             note: vote_average,
+        //             poster_path: poster_path,
+        //             backdrop_path: backdrop_path
+        //         }
+        //         console.log(dataMovie)
+        //         const responseId = await serieService.insertService(dataMovie);
+        //         console.log(responseId)
+        //         console.log(genreIds.length)
+        //         for (let j = 0; j < genreIds.length; j ++){
+        //             const categorieId = await serieCategoryService.findByApiId(genreIds[j].id);
+        //             const dataRelation = {
+        //                 idSerie: responseId,
+        //                 idCategorySerie: categorieId[0].id
+        //             };
+        //             await categoryParSerieService.insertService(dataRelation);
+        //         }
+        //     }
+        // }
         resolve()
     }catch (error) {
         if (error.code === '42P07') {  // Code for "table already exists" in PostgreSQL

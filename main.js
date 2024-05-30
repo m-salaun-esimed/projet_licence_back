@@ -11,7 +11,9 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-const connectionString = "postgres://main:main@postgresql.internal:5432/main";
+// const connectionString = "postgres://main:main@postgresql.internal:5432/main";
+const connectionString = "postgres://tpadmin:tpadmin@localhost:5432/tpadmin";
+
 const db = new pg.Pool({ connectionString: connectionString });
 const port = process.env.PORT || 3333;
 
