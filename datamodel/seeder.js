@@ -475,7 +475,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 name : platformName[i]
             }
             await movieService.insertPlatform(dataPlatform);
-        }s
+        }
 
         resolve()
     }catch (error) {
