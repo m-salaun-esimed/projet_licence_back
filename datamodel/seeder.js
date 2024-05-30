@@ -5,48 +5,49 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Favorite;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS AlreadySeen;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS MovieCategory ;
-        // `);
-        //
-        // await categoryParSerieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryparserie ;
-        // `);
-        //
-        // await serieCategoryService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryserie;
-        // `);
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS friends_requests ;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS notifications ;
-        // `);
-        //
-        // await userService.dao.db.query(`
-        //     DROP TABLE IF EXISTS UserAccount;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Movie;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Category;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS serie;
-        // `);
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Favorite;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS AlreadySeen;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS MovieCategory ;
+        `);
+
+        await categoryParSerieService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryparserie ;
+        `);
+
+        await serieCategoryService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryserie;
+        `);
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS friends_requests ;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS notifications ;
+        `);
+
+        await userService.dao.db.query(`
+            DROP TABLE IF EXISTS UserAccount;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Movie;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS Category;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS serie;
+        `);
+
         // ------------------------------------CREATE TABLE-----------------------------------------
 
         await categorieService.dao.db.query(`
@@ -257,7 +258,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
 
-        for(let i = 1; i < 40; i++){
+        for(let i = 1; i < 80; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -354,7 +355,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         //         }
         // }
         //-------------------------------------------Serie--------------------------------------------
-        for(let i = 1; i < 40; i++){
+        for(let i = 1; i < 60; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
