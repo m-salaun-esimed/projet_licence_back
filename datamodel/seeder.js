@@ -5,48 +5,48 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Favorite;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS AlreadySeen;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS MovieCategory ;
-        `);
-
-        await categoryParSerieService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryparserie ;
-        `);
-
-        await serieCategoryService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryserie;
-        `);
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS friends_requests ;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS notifications ;
-        `);
-
-        await userService.dao.db.query(`
-            DROP TABLE IF EXISTS UserAccount;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Movie;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS Category;
-        `);
-
-        await serieService.dao.db.query(`
-            DROP TABLE IF EXISTS serie;
-        `);
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Favorite;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS AlreadySeen;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS MovieCategory ;
+        // `);
+        //
+        // await categoryParSerieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryparserie ;
+        // `);
+        //
+        // await serieCategoryService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryserie;
+        // `);
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS friends_requests ;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS notifications ;
+        // `);
+        //
+        // await userService.dao.db.query(`
+        //     DROP TABLE IF EXISTS UserAccount;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Movie;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Category;
+        // `);
+        //
+        // await serieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS serie;
+        // `);
         // ------------------------------------CREATE TABLE-----------------------------------------
 
         await categorieService.dao.db.query(`
