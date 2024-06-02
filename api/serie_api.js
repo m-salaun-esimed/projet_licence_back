@@ -10,13 +10,13 @@ module.exports = async (app, serieService, jwt) => {
         const series = await serieService.dao.getSeriesByCategories(categoryIdsArray);
         const response = await serieService.dao.getAllDejaVu(req.user.id);
         const alreadySeenIds = response.map(serie => serie.idapi);
-        console.log(series)
-
+        if (series.length < 5){
+            return res.status(500).json({ error: 'Pas assez de film' });
+        }
         const randomSeries = await getRandomSeries(series, 5, req.user.id);
         const idsSeries = randomSeries.map(movie => movie.idserie);
-        console.log(idsSeries)
         const selectedSeries = await serieService.dao.getSeriesByIds(idsSeries);
-
+        console.log(selectedSeries)
 
         for (let i = 0; i < selectedSeries.length; i++) {
             if (alreadySeenIds.includes(selectedSeries[i].idapi)) {

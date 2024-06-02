@@ -34,7 +34,6 @@ module.exports = (app, movieService, jwt) => {
             const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
             const alreadySeenIds = response.map(movie => movie.idapi);
-            console.log(alreadySeenIds)
             if (movies.length < 5){
                 return res.status(500).json({ error: 'Pas assez de film' });
             }
