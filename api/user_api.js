@@ -107,49 +107,52 @@ module.exports = (app, userService, jwt) => {
         }
     })
 
-    app.post('/user/createAccount', async (req, res) => {
+    app.post('/user/createAccount', jwt.validateJWT, async (req, res) => {
         try {
-            const { displayName, login, password} = req.body;
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
+
+            const { displayName, login, password } = req.body;
 
             if (!displayName || !login || !password) {
-                res.status(400).end();
-                return;
+                return res.status(400).json({ error: 'Display name, login, and password are required.' });
             }
 
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
             if (!passwordRegex.test(password)) {
-                res.status(400).json({ error: 'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.' });
-                return;
+                return res.status(400).json({ error: 'Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.' });
             }
 
             try {
-                const authenticated = await userService.validateCreationCompte(displayName, login);
+                const userExists = await userService.validateCreationCompte(displayName, login);
 
-                if (authenticated) {
-                    res.status(400).json({ error: 'Le Pseudo ou le login existe déjà' });
-                    return;
+                if (userExists) {
+                    return res.status(400).json({ error: 'Display name or login already exists.' });
                 }
 
-                const data = {
-                    displayName : displayName,
+                const newUser = {
+                    displayName: displayName,
                     login: login,
-                    password : password,
-                    admin : false
+                    password: password,
+                    admin: false
                 };
 
-                await userService.insertService(data);
+                await userService.insertService(newUser);
 
-                res.json({ 'token': jwt.generateJWT(login) });
+                const token = jwt.generateJWT(login);
+                res.status(201).json({ token: token });
             } catch (error) {
                 console.error(error);
-                res.status(500).end();
+                res.status(500).json({ error: 'Internal server error.' });
             }
         } catch (error) {
             console.error(error);
-            res.status(500).end();
+            res.status(500).json({ error: 'Internal server error.' });
         }
     });
+
 
     app.post('/api/verifyToken', jwt.validateJWT, (req, res, next) => {
         res.json({ status: 200, data: 'Token valide' });
@@ -158,6 +161,9 @@ module.exports = (app, userService, jwt) => {
 
     app.delete("/user", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { login } = req.headers;
 
             if (!login) {
@@ -178,6 +184,9 @@ module.exports = (app, userService, jwt) => {
 
     app.put("/user/pwd", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { login, mdp } = req.body;
 
             if (!login || !mdp) {

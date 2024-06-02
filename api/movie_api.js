@@ -122,6 +122,9 @@ module.exports = (app, movieService, jwt) => {
 
     app.delete("/movie", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { idmovieapi, name } = req.headers;
 
             if (!idmovieapi && !name) {
@@ -149,6 +152,9 @@ module.exports = (app, movieService, jwt) => {
 
     app.put("/movie", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { id, name, newName, overview } = req.body;
 
             if (!id && !name) {

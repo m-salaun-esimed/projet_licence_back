@@ -78,6 +78,9 @@ module.exports = async (app, serieService, jwt) => {
 
     app.delete("/serie", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { idserieapi, name } = req.headers;
 
             if (!idserieapi && !name) {
@@ -105,6 +108,9 @@ module.exports = async (app, serieService, jwt) => {
 
     app.put("/serie", jwt.validateJWT, async (req, res) => {
         try {
+            if (req.user.admin !== true) {
+                return res.status(403).json({ error: 'Access denied.' });
+            }
             const { id, name, newName, overview } = req.body;
 
             if (!id && !name) {
