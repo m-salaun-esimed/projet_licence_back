@@ -164,13 +164,13 @@ module.exports = (app, userService, jwt) => {
             if (req.user.admin !== true) {
                 return res.status(403).json({ error: 'Access denied.' });
             }
-            const { login } = req.headers;
+            const { displayname } = req.headers;
 
-            if (!login) {
+            if (!displayname) {
                 return res.status(400).json({ error: 'Erreur dans les données envoyées à la requête' });
             }
 
-            let result = await userService.dao.deleteUser(login);
+            let result = await userService.dao.deleteUser(displayname);
             if (!result || result.rowCount === 0) {
                 return res.status(404).json({ error: 'User non trouvée.' });
             }
