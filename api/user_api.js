@@ -107,7 +107,7 @@ module.exports = (app, userService, jwt) => {
         }
     })
 
-    app.post('/user/createAccount', jwt.validateJWT, async (req, res) => {
+    app.post('/user/createAccount', async (req, res) => {
         try {
             const { displayName, login, password } = req.body;
 
