@@ -109,10 +109,6 @@ module.exports = (app, userService, jwt) => {
 
     app.post('/user/createAccount', jwt.validateJWT, async (req, res) => {
         try {
-            if (req.user.admin !== true) {
-                return res.status(403).json({ error: 'Access denied.' });
-            }
-
             const { displayName, login, password } = req.body;
 
             if (!displayName || !login || !password) {
