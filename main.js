@@ -11,8 +11,22 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-const connectionString = "postgres://main:main@postgresql.internal:5432/main";
+// const connectionString = "postgres://main:main@postgresql.internal:5432/main";
 // const connectionString = "postgres://tpadmin:tpadmin@localhost:5432/tpadmin";
+
+var connectionString = process.env.CONNECTION_STRING
+if (connectionString === undefined) {
+    const { env } = process;
+    const read_base64_json = function(varName) {
+        try {
+            return JSON.parse(Buffer.from(env[varName], "base64").toString())
+        } catch (err) {
+            throw new Error(`no ${varName} environment variable`)
+        }
+    };
+    const variables = read_base64_json('PLATFORM_VARIABLES')
+    connectionString = variables["CONNECTION_STRING"]
+}
 
 const db = new pg.Pool({ connectionString: connectionString });
 const port = process.env.PORT || 3333;
