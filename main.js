@@ -11,9 +11,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-// const connectionString = "postgres://main:main@postgresql.internal:5432/main";
-// const connectionString = "postgres://tpadmin:tpadmin@localhost:5432/tpadmin";
-
 var connectionString = process.env.CONNECTION_STRING
 if (connectionString === undefined) {
     const { env } = process;

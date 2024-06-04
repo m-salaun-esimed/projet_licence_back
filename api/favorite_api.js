@@ -11,6 +11,19 @@ module.exports = (app, favoriteService, jwt) => {
         }
     });
 
+    app.get("/favorite/user", jwt.validateJWT, async (req, res) => {
+        try {
+            const { iduser } = req.headers;
+            console.log(iduser)
+            const data = await favoriteService.dao.getAllFavoriteByIdUser(iduser);
+            console.log(data)
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
     app.post("/favorite/post", jwt.validateJWT,  async (req, res) => {
         try {
             const { idapi, typecontenu } = req.body;
