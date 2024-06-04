@@ -15,6 +15,15 @@ module.exports = class AlreadySeenMovieDao extends BaseDAO {
         }
     }
 
+    async getAlreadySeenMovieId(iduser) {
+        try {
+            const result = await this.db.query(`SELECT * FROM ${this.tablename} WHERE iduser = $1`, [iduser]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async insertAlreadySeenMovie(data){
         const keys = Object.keys(data);
         const values = Object.values(data);

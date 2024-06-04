@@ -10,6 +10,18 @@ module.exports = (app, alreadySeenService, jwt) => {
         }
     });
 
+    app.get("/alreadySeenMovie/user", jwt.validateJWT, async (req, res) => {
+        try {
+            const { iduser } = req.headers;
+            console.log(iduser)
+            const data = await alreadySeenService.dao.getAlreadySeenMovieId(iduser);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
     app.post("/alreadySeenMovie/post", jwt.validateJWT,  async (req, res) => {
         try {
             const { idapi, typecontenu } = req.body;
