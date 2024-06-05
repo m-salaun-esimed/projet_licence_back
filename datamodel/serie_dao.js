@@ -6,6 +6,29 @@ module.exports = class SerieDao extends BaseDAO {
         super(db, namespace)
     }
 
+    async getAllSeries(){
+        let tab = "serie"
+        try {
+            const result = await this.db.query(`SELECT * FROM ${tab}`);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async addUrl(url, idapi) {
+        const tab = "serie";
+        try {
+            const result = await this.db.query(
+                `UPDATE ${tab} SET urltrailer = $1 WHERE idapi = $2`,
+                [url, idapi]
+            );
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getSeriesByCategories(categoryIdsArray){
         try {
             let tab = "categoryparserie";

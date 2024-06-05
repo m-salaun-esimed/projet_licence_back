@@ -19,6 +19,20 @@ module.exports = class MovieDao extends BaseDAO {
         let tab = "movie"
         try {
             const result = await this.db.query(`SELECT * FROM ${tab}`);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async addUrl(url, idapi) {
+        const tab = "movie";
+        try {
+            const result = await this.db.query(
+                `UPDATE ${tab} SET urltrailer = $1 WHERE idapi = $2`,
+                [url, idapi]
+            );
+            return result.rows;
         } catch (error) {
             throw error;
         }

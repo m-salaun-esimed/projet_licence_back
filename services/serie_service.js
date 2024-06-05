@@ -8,4 +8,12 @@ module.exports = class SerieService {
     insertService(data) {
         return this.dao.insert(data)
     }
+
+    async getSeries(){
+        return await this.dao.getAllSeries();
+    }
+
+    async addUrl(url, idapi){
+         await this.dao.addUrl(url, idapi);
+    }
 }

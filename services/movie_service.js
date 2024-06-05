@@ -13,4 +13,12 @@ module.exports = class MovieService {
     async insertPlatform(data){
         return await this.dao.insertPlatform(data);
     }
+
+    async getMovies(){
+        return await this.dao.getAllMovie();
+    }
+
+    async addUrl(url, idapi){
+        await this.dao.addUrl(url, idapi);
+    }
 }

@@ -5,52 +5,52 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Favorite;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS AlreadySeen;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS MovieCategory ;
-        // `);
-        //
-        // await categoryParSerieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryparserie ;
-        // `);
-        //
-        // await serieCategoryService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryserie;
-        // `);
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS friends_requests ;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS notifications ;
-        // `);
-        //
-        // await userService.dao.db.query(`
-        //     DROP TABLE IF EXISTS UserAccount;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Movie;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Category;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS serie;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS platform;
-        // `);
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Favorite;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS AlreadySeen;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS MovieCategory ;
+        `);
+
+        await categoryParSerieService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryparserie ;
+        `);
+
+        await serieCategoryService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryserie;
+        `);
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS friends_requests ;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS notifications ;
+        `);
+
+        await userService.dao.db.query(`
+            DROP TABLE IF EXISTS UserAccount;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Movie;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS Category;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS serie;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS platform;
+        `);
 
         // ------------------------------------CREATE TABLE-----------------------------------------
 
@@ -85,7 +85,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 id SERIAL PRIMARY KEY,
                 idApi INT NOT NULL,
                 name VARCHAR(255) NOT NULL,
-                nameFilmMaker VARCHAR(255) NOT NULL,
+                urlTrailer VARCHAR(255),
                 overview TEXT NOT NULL,
                 note FLOAT NOT NULL,
                 poster_path TEXT,
@@ -98,7 +98,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             id SERIAL PRIMARY KEY,
             idApi INT NOT NULL,
             name VARCHAR(255) NOT NULL,
-            nameFilmMaker VARCHAR(255) NOT NULL,
+            urlTrailer VARCHAR(255),
             overview TEXT NOT NULL,
             note FLOAT NOT NULL,
             poster_path TEXT,
@@ -269,8 +269,8 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         const fetchMovie = require('node-fetch');
-
-        for(let i = 1; i < 80; i++){
+        //80
+        for(let i = 1; i < 50; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -297,7 +297,6 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 const dataMovie  = {
                     idapi: idapi[index],
                     name: movieTitle,
-                    namefilmmaker: "nameFilmMaker" + index,
                     overview: overviews[index],
                     note: vote_average[index],
                     poster_path: poster_path[index],
@@ -309,11 +308,13 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
                 for (let j = 0; j < genreIds[index].length; j ++){
                     const categorieId = await categorieService.findByApiId(genreIds[index][j]);
-                    const dataRelation = {
-                        idmovie: responseId,
-                        idcategory: categorieId[0].id
-                    };
-                    await movieCategoryService.insertService(dataRelation);
+                    if (categorieId && categorieId.length > 0) {
+                        const dataRelation = {
+                            idmovie: responseId,
+                            idcategory: categorieId[0].id
+                        };
+                        await movieCategoryService.insertService(dataRelation);
+                    }
                 }
             }));
         }
@@ -367,7 +368,8 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         //         }
         // }
         //-------------------------------------------Serie--------------------------------------------
-        for(let i = 1; i < 60; i++){
+        //60
+        for(let i = 1; i < 50; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
@@ -395,7 +397,6 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 const dataMovie  = {
                     idapi: idapi[index],
                     name: movieTitle,
-                    namefilmmaker: "nameFilmMaker" + index,
                     overview: overviews[index],
                     note: vote_average[index],
                     poster_path: poster_path[index],
@@ -406,14 +407,14 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 const responseId = await serieService.insertService(dataMovie);
                 for (let j = 0; j < genreIds[index].length; j ++){
                     const categorieId = await serieCategoryService.findByApiId(genreIds[index][j]);
-                    const dataRelation = {
-                        idSerie: responseId,
-                        idCategorySerie: categorieId[0].id
-                    };
-                    await categoryParSerieService.insertService(dataRelation);
+                    if (categorieId && categorieId.length > 0) {                        const dataRelation = {
+                            idSerie: responseId,
+                            idCategorySerie: categorieId[0].id
+                        };
+                        await categoryParSerieService.insertService(dataRelation);
+                    }
                 }
             }));
-
         }
 
         // for(let i = 1; i < 500; i++){
@@ -464,6 +465,81 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         //         }
         //     }
         // }
+
+        //-------------------------------------Trailer Movie-------------------------------------------
+
+        // const movies = await movieService.getMovies();
+        //
+        // for (const movie of movies) {
+        //     console.log(`Movie ID: ${movie.idapi}`);
+        //     const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/videos?language=fr-FR`;
+        //     const options = {
+        //         method: 'GET',
+        //         headers: {
+        //             accept: 'application/json',
+        //             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
+        //         }
+        //     };
+        //
+        //     try {
+        //         const response = await fetch(trailerUrl, options);
+        //         if (!response.ok) {
+        //             throw new Error('Erreur lors de la récupération des données depuis l\'API');
+        //         }
+        //
+        //         const json = await response.json();
+        //
+        //         // Access trailer data
+        //         const trailer = json.results?.[0];
+        //         if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
+        //             console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
+        //             const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+        //             await movieService.addUrl(url, movie.idapi);
+        //         } else {
+        //             console.log('No trailer found for this movie or trailer not from YouTube');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching trailer or poster data:', error);
+        //     }
+        //     console.log('---'); // Separator for each movie
+        // }
+
+        //-------------------------------------Trailer Serie-------------------------------------------
+
+        const series = await serieService.getSeries();
+
+        for (const serie of series) {
+            console.log(`Movie ID: ${serie.idapi}`);
+            const trailerUrl = `https://api.themoviedb.org/3/tv/${serie.idapi}/videos?language=fr-FR`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
+                }
+            };
+
+            try {
+                const response = await fetch(trailerUrl, options);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données depuis l\'API');
+                }
+
+                const json = await response.json();
+                const trailer = json.results?.[0];
+                if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
+                    console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
+                    const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+                    await serieService.addUrl(url, serie.idapi);
+                } else {
+                    console.log('No trailer found for this serie or trailer not from YouTube');
+                }
+            } catch (error) {
+                console.error('Error fetching trailer or poster data:', error);
+            }
+            console.log('---'); // Separator for each movie
+        }
+
         //------------------------------------platform--------------------------------------------
 
         const platformName = ["Amazon Video","Netflix","Apple TV","Disney Plus","Canal+","Canal VOD", "Canal+ Séries", "Crunchyroll"];

@@ -112,20 +112,21 @@ module.exports = (app, userService, jwt) => {
             const { displayName, login, password } = req.body;
 
             if (!displayName || !login || !password) {
-                return res.status(400).json({ error: 'Display name, login, and password are required.' });
+                return res.status(400).json({ error: 'Le nom d\'utilisateur, l\'email et le mot de passe est obligatoire.' });
             }
 
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
             if (!passwordRegex.test(password)) {
-                return res.status(400).json({ error: 'Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.' });
+                return res.status(400).json({ error: '\n' +
+                        'Le mot de passe doit contenir au moins 8 caractères, y compris une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.' });
             }
 
             try {
                 const userExists = await userService.validateCreationCompte(displayName, login);
 
                 if (userExists) {
-                    return res.status(400).json({ error: 'Display name or login already exists.' });
+                    return res.status(400).json({ error: 'Le nom d\'utilisateur ou l\'email existe déjà' });
                 }
 
                 const newUser = {

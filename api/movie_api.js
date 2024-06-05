@@ -97,28 +97,6 @@ module.exports = (app, movieService, jwt) => {
         }
     });
 
-    // async function getRandomMovies(movies, num, userId) {
-    //     const randomMovies = [];
-    //     const totalMovies = movies.length;
-    //     const response = await movieService.dao.getAllDejaVu(userId);
-    //
-    //     const alreadySeenIds = response.map(movie => movie.idmovieapi);
-    //
-    //     console.log("alreadySeenIds : " + alreadySeenIds)
-    //     const indices = new Set();
-    //     while (indices.size < num) {
-    //         const randomIndex = Math.floor(Math.random() * totalMovies);
-    //         if (!(alreadySeenIds.includes(movies[randomIndex].idapi))) {
-    //             indices.add(randomIndex);
-    //         }
-    //     }
-    //
-    //     indices.forEach(index => {
-    //         randomMovies.push(movies[index]);
-    //     });
-    //     console.log(randomMovies)
-    //     return randomMovies;
-    // }
 
     app.delete("/movie", jwt.validateJWT, async (req, res) => {
         try {
