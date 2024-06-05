@@ -468,41 +468,41 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         //-------------------------------------Trailer Movie-------------------------------------------
 
-        // const movies = await movieService.getMovies();
-        //
-        // for (const movie of movies) {
-        //     console.log(`Movie ID: ${movie.idapi}`);
-        //     const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/videos?language=fr-FR`;
-        //     const options = {
-        //         method: 'GET',
-        //         headers: {
-        //             accept: 'application/json',
-        //             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
-        //         }
-        //     };
-        //
-        //     try {
-        //         const response = await fetch(trailerUrl, options);
-        //         if (!response.ok) {
-        //             throw new Error('Erreur lors de la récupération des données depuis l\'API');
-        //         }
-        //
-        //         const json = await response.json();
-        //
-        //         // Access trailer data
-        //         const trailer = json.results?.[0];
-        //         if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
-        //             console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
-        //             const url = `https://www.youtube.com/watch?v=${trailer.key}`;
-        //             await movieService.addUrl(url, movie.idapi);
-        //         } else {
-        //             console.log('No trailer found for this movie or trailer not from YouTube');
-        //         }
-        //     } catch (error) {
-        //         console.error('Error fetching trailer or poster data:', error);
-        //     }
-        //     console.log('---'); // Separator for each movie
-        // }
+        const movies = await movieService.getMovies();
+
+        for (const movie of movies) {
+            console.log(`Movie ID: ${movie.idapi}`);
+            const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/videos?language=fr-FR`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
+                }
+            };
+
+            try {
+                const response = await fetch(trailerUrl, options);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données depuis l\'API');
+                }
+
+                const json = await response.json();
+
+                // Access trailer data
+                const trailer = json.results?.[0];
+                if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
+                    console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
+                    const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+                    await movieService.addUrl(url, movie.idapi);
+                } else {
+                    console.log('No trailer found for this movie or trailer not from YouTube');
+                }
+            } catch (error) {
+                console.error('Error fetching trailer or poster data:', error);
+            }
+            console.log('---'); // Separator for each movie
+        }
 
         //-------------------------------------Trailer Serie-------------------------------------------
 
