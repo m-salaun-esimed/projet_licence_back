@@ -48,10 +48,11 @@ module.exports = (app, favoriteService, jwt) => {
     app.delete('/favorite/delete', jwt.validateJWT, async (req, res) => {
         try {
             const idapi = req.body.idapi;
+            const type = req.body.type;
             if (!idapi) {
                 return res.status(400).json({ message: 'L\'ID de l\'événement est manquant dans le corps de la requête.' });
             }
-            await favoriteService.dao.deleteFavoriteByMovieIdApiUser(idapi, req.user);
+            await favoriteService.dao.deleteFavoriteByMovieIdApiUser(idapi, req.user, type);
 
             res.status(200).json({ message: 'L\'événement a été supprimé avec succès.' });
         } catch (error) {

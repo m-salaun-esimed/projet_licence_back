@@ -106,18 +106,18 @@ module.exports = class MovieDao extends BaseDAO {
     }
 
 
-    async getMoviesSerieBySearch(query){
+    async getMoviesSerieBySearch(query) {
         try {
             const queryString = `
         SELECT *
         FROM (
             SELECT *, 'movie' AS type
             FROM movie
-            WHERE name LIKE '%${query}%'
+            WHERE name ILIKE '%${query}%'
             UNION
             SELECT *, 'serie' AS type
             FROM serie
-            WHERE name LIKE '%${query}%'
+            WHERE name ILIKE '%${query}%'
         ) AS search_result
         `;
             const result = await this.db.query(queryString);

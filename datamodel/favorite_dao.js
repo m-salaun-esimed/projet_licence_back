@@ -28,13 +28,13 @@ module.exports = class FavoriteDao extends BaseDAO {
         return this.db.query(query, values)
     }
 
-    async deleteFavoriteByMovieIdApiUser(idApi, user) {
+    async deleteFavoriteByMovieIdApiUser(idApi, user, type) {
         try {
             const query = `
             DELETE FROM ${this.tablename}
-            WHERE idapi = $1 AND iduser = $2
+            WHERE idapi = $1 AND iduser = $2 AND typecontenu = $3
         `;
-            const values = [idApi, user.id];
+            const values = [idApi, user.id, type];
 
             await this.db.query(query, values);
 

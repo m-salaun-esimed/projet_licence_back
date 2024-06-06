@@ -183,11 +183,11 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             );
         `);
 
-        // ------------------------------------------SEEDER----------------------------------------------
-
-
-        //-------------------------------------------CATEGORY MOVIE--------------------------------------------
-
+        // // ------------------------------------------SEEDER----------------------------------------------
+        //
+        //
+        // //-------------------------------------------CATEGORY MOVIE--------------------------------------------
+        //
         const fetch = require('node-fetch');
         console.log("cat avant fecth")
         const url = 'https://api.themoviedb.org/3/genre/movie/list?language=fr';
@@ -242,7 +242,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             await serieCategoryService.insertService(data);
         }));
 
-        //-------------------------------------------USER--------------------------------------------
+        // -------------------------------------------USER--------------------------------------------
 
         let listDeUser = [ "Leana", "Malo", "Carine", "Franck"]
         let listDeLogin = ["Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
