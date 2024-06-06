@@ -5,272 +5,272 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Favorite;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS AlreadySeen;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS MovieCategory ;
-        `);
-
-        await categoryParSerieService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryparserie ;
-        `);
-
-        await serieCategoryService.dao.db.query(`
-            DROP TABLE IF EXISTS categoryserie;
-        `);
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS friends_requests ;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS notifications ;
-        `);
-
-        await userService.dao.db.query(`
-            DROP TABLE IF EXISTS UserAccount;
-        `);
-
-        await movieService.dao.db.query(`
-            DROP TABLE IF EXISTS Movie;
-        `);
-
-        await categorieService.dao.db.query(`
-            DROP TABLE IF EXISTS Category;
-        `);
-
-        await serieService.dao.db.query(`
-            DROP TABLE IF EXISTS serie;
-        `);
-
-        await serieService.dao.db.query(`
-            DROP TABLE IF EXISTS platform;
-        `);
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Favorite;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS AlreadySeen;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS MovieCategory ;
+        // `);
+        //
+        // await categoryParSerieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryparserie ;
+        // `);
+        //
+        // await serieCategoryService.dao.db.query(`
+        //     DROP TABLE IF EXISTS categoryserie;
+        // `);
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS friends_requests ;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS notifications ;
+        // `);
+        //
+        // await userService.dao.db.query(`
+        //     DROP TABLE IF EXISTS UserAccount;
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Movie;
+        // `);
+        //
+        // await categorieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS Category;
+        // `);
+        //
+        // await serieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS serie;
+        // `);
+        //
+        // await serieService.dao.db.query(`
+        //     DROP TABLE IF EXISTS platform;
+        // `);
 
         // ------------------------------------CREATE TABLE-----------------------------------------
 
-        await categorieService.dao.db.query(`
-            CREATE TABLE Category (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                idApi INT
-            );
-        `);
-
-        await serieCategoryService.dao.db.query(`
-            CREATE TABLE categoryserie (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            idApi INT
-            );
-        `);
-
-        await userService.dao.db.query(`
-            CREATE TABLE UserAccount (
-                id SERIAL PRIMARY KEY,
-                displayName VARCHAR(255) UNIQUE NOT NULL,
-                login VARCHAR(255) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                admin BOOLEAN NOT NULL
-            );
-        `);
-
-        await movieService.dao.db.query(`
-            CREATE TABLE Movie (
-                id SERIAL PRIMARY KEY,
-                idApi INT NOT NULL,
-                name VARCHAR(255) NOT NULL,
-                urlTrailer VARCHAR(255),
-                overview TEXT NOT NULL,
-                note FLOAT NOT NULL,
-                poster_path TEXT,
-                backdrop_path TEXT
-            );
-        `);
-
-        await serieService.dao.db.query(`
-            CREATE TABLE serie (
-            id SERIAL PRIMARY KEY,
-            idApi INT NOT NULL,
-            name VARCHAR(255) NOT NULL,
-            urlTrailer VARCHAR(255),
-            overview TEXT NOT NULL,
-            note FLOAT NOT NULL,
-            poster_path TEXT,
-            backdrop_path TEXT
-            );
-        `);
-
-
-        await movieCategoryService.dao.db.query(`
-            CREATE TABLE MovieCategory (
-                id SERIAL PRIMARY KEY,
-                idMovie INT,
-                idCategory INT,
-                FOREIGN KEY (idMovie) REFERENCES Movie(id),
-                FOREIGN KEY (idCategory) REFERENCES Category(id)
-            );
-        `);
-
-        await categoryParSerieService.dao.db.query(`
-            CREATE TABLE  categoryparserie (
-            id SERIAL PRIMARY KEY,
-            idSerie INT,
-            idCategorySerie INT,
-            FOREIGN KEY (idSerie) REFERENCES serie(id),
-            FOREIGN KEY (idCategorySerie) REFERENCES categoryserie(id)
-            );
-        `);
-
-        await movieService.dao.db.query(`
-            CREATE TABLE Favorite (
-                id SERIAL PRIMARY KEY,
-                idapi INT,
-                idUser INT,
-                typeContenu VARCHAR(255),
-                FOREIGN KEY (idUser) REFERENCES UserAccount(id)
-            );
-        `);
-
-        await movieService.dao.db.query(`
-            CREATE TABLE  AlreadySeen (
-                id SERIAL PRIMARY KEY,
-                idApi INT,
-                idUser INT,
-                typeContenu VARCHAR(255),
-                FOREIGN KEY (idUser) REFERENCES UserAccount(id)
-            );
-        `);
-
-        await movieService.dao.db.query(`
-            CREATE TABLE  notifications (
-            id SERIAL PRIMARY KEY,
-            receiver_id INT,
-            sender_id INT,
-            notification_type VARCHAR(50), -- Par exemple, 'friend_request'
-            notification_message TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_read BOOLEAN DEFAULT FALSE,
-            FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
-            FOREIGN KEY (sender_id) REFERENCES UserAccount(id)
-            );
-        `);
-        await movieService.dao.db.query(`
-            CREATE TABLE friends_requests (
-            id SERIAL PRIMARY KEY,
-            sender_id INT,
-            receiver_id INT,
-                status VARCHAR(20) DEFAULT 'pending', -- Peut être 'pending', 'accepted' ou 'rejected'
-            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            accepted_at TIMESTAMP,
-            notification_id INT,
-            FOREIGN KEY (sender_id) REFERENCES UserAccount(id),
-            FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
-            FOREIGN KEY (notification_id) REFERENCES notifications(id)
-            );
-        `);
-
-        await movieService.dao.db.query(`
-            CREATE TABLE platform (
-            id SERIAL PRIMARY KEY,
-            idapi INT,
-            name VARCHAR(50)
-            );
-        `);
+        // await categorieService.dao.db.query(`
+        //     CREATE TABLE Category (
+        //         id SERIAL PRIMARY KEY,
+        //         name VARCHAR(255) NOT NULL,
+        //         idApi INT
+        //     );
+        // `);
+        //
+        // await serieCategoryService.dao.db.query(`
+        //     CREATE TABLE categoryserie (
+        //     id SERIAL PRIMARY KEY,
+        //     name VARCHAR(255) NOT NULL,
+        //     idApi INT
+        //     );
+        // `);
+        //
+        // await userService.dao.db.query(`
+        //     CREATE TABLE UserAccount (
+        //         id SERIAL PRIMARY KEY,
+        //         displayName VARCHAR(255) UNIQUE NOT NULL,
+        //         login VARCHAR(255) UNIQUE NOT NULL,
+        //         password VARCHAR(255) NOT NULL,
+        //         admin BOOLEAN NOT NULL
+        //     );
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE Movie (
+        //         id SERIAL PRIMARY KEY,
+        //         idApi INT NOT NULL,
+        //         name VARCHAR(255) NOT NULL,
+        //         urlTrailer VARCHAR(255),
+        //         overview TEXT NOT NULL,
+        //         note FLOAT NOT NULL,
+        //         poster_path TEXT,
+        //         backdrop_path TEXT
+        //     );
+        // `);
+        //
+        // await serieService.dao.db.query(`
+        //     CREATE TABLE serie (
+        //     id SERIAL PRIMARY KEY,
+        //     idApi INT NOT NULL,
+        //     name VARCHAR(255) NOT NULL,
+        //     urlTrailer VARCHAR(255),
+        //     overview TEXT NOT NULL,
+        //     note FLOAT NOT NULL,
+        //     poster_path TEXT,
+        //     backdrop_path TEXT
+        //     );
+        // `);
+        //
+        //
+        // await movieCategoryService.dao.db.query(`
+        //     CREATE TABLE MovieCategory (
+        //         id SERIAL PRIMARY KEY,
+        //         idMovie INT,
+        //         idCategory INT,
+        //         FOREIGN KEY (idMovie) REFERENCES Movie(id),
+        //         FOREIGN KEY (idCategory) REFERENCES Category(id)
+        //     );
+        // `);
+        //
+        // await categoryParSerieService.dao.db.query(`
+        //     CREATE TABLE  categoryparserie (
+        //     id SERIAL PRIMARY KEY,
+        //     idSerie INT,
+        //     idCategorySerie INT,
+        //     FOREIGN KEY (idSerie) REFERENCES serie(id),
+        //     FOREIGN KEY (idCategorySerie) REFERENCES categoryserie(id)
+        //     );
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE Favorite (
+        //         id SERIAL PRIMARY KEY,
+        //         idapi INT,
+        //         idUser INT,
+        //         typeContenu VARCHAR(255),
+        //         FOREIGN KEY (idUser) REFERENCES UserAccount(id)
+        //     );
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE  AlreadySeen (
+        //         id SERIAL PRIMARY KEY,
+        //         idApi INT,
+        //         idUser INT,
+        //         typeContenu VARCHAR(255),
+        //         FOREIGN KEY (idUser) REFERENCES UserAccount(id)
+        //     );
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE  notifications (
+        //     id SERIAL PRIMARY KEY,
+        //     receiver_id INT,
+        //     sender_id INT,
+        //     notification_type VARCHAR(50), -- Par exemple, 'friend_request'
+        //     notification_message TEXT,
+        //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        //     is_read BOOLEAN DEFAULT FALSE,
+        //     FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
+        //     FOREIGN KEY (sender_id) REFERENCES UserAccount(id)
+        //     );
+        // `);
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE friends_requests (
+        //     id SERIAL PRIMARY KEY,
+        //     sender_id INT,
+        //     receiver_id INT,
+        //         status VARCHAR(20) DEFAULT 'pending', -- Peut être 'pending', 'accepted' ou 'rejected'
+        //     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        //     accepted_at TIMESTAMP,
+        //     notification_id INT,
+        //     FOREIGN KEY (sender_id) REFERENCES UserAccount(id),
+        //     FOREIGN KEY (receiver_id) REFERENCES UserAccount(id),
+        //     FOREIGN KEY (notification_id) REFERENCES notifications(id)
+        //     );
+        // `);
+        //
+        // await movieService.dao.db.query(`
+        //     CREATE TABLE platform (
+        //     id SERIAL PRIMARY KEY,
+        //     idapi INT,
+        //     name VARCHAR(50)
+        //     );
+        // `);
 
         // ------------------------------------------SEEDER----------------------------------------------
 
 
         //-------------------------------------------CATEGORY MOVIE--------------------------------------------
-
-        const fetch = require('node-fetch');
-        console.log("cat avant fecth")
-        const url = 'https://api.themoviedb.org/3/genre/movie/list?language=fr';
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
-            }
-        };
-        console.log("cat apres fecth")
-
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données depuis l\'API');
-        }
-        const json = await response.json();
-        const genreNames = json.genres.map(genre => genre.name);
-        const genreIds = json.genres.map(genre => genre.id);
-        console.log("genreNames" + genreNames)
-        await Promise.all(genreNames.map(async (name, index) => {
-            const data = {
-                name,
-                idApi: genreIds[index]
-            };
-            await categorieService.insertService(data);
-        }));
+        //
+        // const fetch = require('node-fetch');
+        // console.log("cat avant fecth")
+        // const url = 'https://api.themoviedb.org/3/genre/movie/list?language=fr';
+        // const options = {
+        //     method: 'GET',
+        //     headers: {
+        //         accept: 'application/json',
+        //         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
+        //     }
+        // };
+        // console.log("cat apres fecth")
+        //
+        // const response = await fetch(url, options);
+        // if (!response.ok) {
+        //     throw new Error('Erreur lors de la récupération des données depuis l\'API');
+        // }
+        // const json = await response.json();
+        // const genreNames = json.genres.map(genre => genre.name);
+        // const genreIds = json.genres.map(genre => genre.id);
+        // console.log("genreNames" + genreNames)
+        // await Promise.all(genreNames.map(async (name, index) => {
+        //     const data = {
+        //         name,
+        //         idApi: genreIds[index]
+        //     };
+        //     await categorieService.insertService(data);
+        // }));
         //-------------------------------------------CATEGORY SERIE--------------------------------------------
-        const urlSerieCategory = 'https://api.themoviedb.org/3/genre/tv/list?language=fr';
-        const optionsSerieCategory = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
-            }
-        };
-        console.log("cat apres fecth")
-
-        const responseSerieCategory = await fetch(urlSerieCategory, optionsSerieCategory);
-        if (!responseSerieCategory.ok) {
-            throw new Error('Erreur lors de la récupération des données depuis l\'API');
-        }
-        const jsonSerieCategory = await responseSerieCategory.json();
-        const genreNamesSerieCategory = jsonSerieCategory.genres.map(genre => genre.name);
-        const genreIdsSerieCategory = jsonSerieCategory.genres.map(genre => genre.id);
-        console.log("genreNames serie" + genreNamesSerieCategory)
-        await Promise.all(genreNamesSerieCategory.map(async (name, index) => {
-            const data = {
-                name,
-                idApi: genreIdsSerieCategory[index]
-            };
-            await serieCategoryService.insertService(data);
-        }));
+        // const urlSerieCategory = 'https://api.themoviedb.org/3/genre/tv/list?language=fr';
+        // const optionsSerieCategory = {
+        //     method: 'GET',
+        //     headers: {
+        //         accept: 'application/json',
+        //         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
+        //     }
+        // };
+        // console.log("cat apres fecth")
+        //
+        // const responseSerieCategory = await fetch(urlSerieCategory, optionsSerieCategory);
+        // if (!responseSerieCategory.ok) {
+        //     throw new Error('Erreur lors de la récupération des données depuis l\'API');
+        // }
+        // const jsonSerieCategory = await responseSerieCategory.json();
+        // const genreNamesSerieCategory = jsonSerieCategory.genres.map(genre => genre.name);
+        // const genreIdsSerieCategory = jsonSerieCategory.genres.map(genre => genre.id);
+        // console.log("genreNames serie" + genreNamesSerieCategory)
+        // await Promise.all(genreNamesSerieCategory.map(async (name, index) => {
+        //     const data = {
+        //         name,
+        //         idApi: genreIdsSerieCategory[index]
+        //     };
+        //     await serieCategoryService.insertService(data);
+        // }));
 
         //-------------------------------------------USER--------------------------------------------
 
-        let listDeUser = [ "Leana", "Malo", "Carine", "Franck"]
-        let listDeLogin = ["Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
-
-        for (let i = 0; i < 4; i++) {
-            const data = {
-                displayName: listDeUser[i],
-                login: listDeLogin[i],
-                password: "azerty",
-                admin: false
-            };
-            await userService.insertService(data);
-        }
-
-        const data = {
-            displayName: "Matthieu",
-            login: "Matthieu@gmail.com",
-            password: "azerty",
-            admin: true
-        };
-        await userService.insertService(data);
+        // let listDeUser = [ "Leana", "Malo", "Carine", "Franck"]
+        // let listDeLogin = ["Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
+        //
+        // for (let i = 0; i < 4; i++) {
+        //     const data = {
+        //         displayName: listDeUser[i],
+        //         login: listDeLogin[i],
+        //         password: "azerty",
+        //         admin: false
+        //     };
+        //     await userService.insertService(data);
+        // }
+        //
+        // const data = {
+        //     displayName: "Matthieu",
+        //     login: "Matthieu@gmail.com",
+        //     password: "azerty",
+        //     admin: true
+        // };
+        // await userService.insertService(data);
 
         //-------------------------------------------MOVIE--------------------------------------------
 
 
         const fetchMovie = require('node-fetch');
         //80
-        for(let i = 1; i < 25; i++){
+        for(let i = 26; i < 50; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -369,7 +369,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         // }
         //-------------------------------------------Serie--------------------------------------------
         //60
-        for(let i = 1; i < 25; i++){
+        for(let i = 26; i < 50; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
@@ -471,37 +471,39 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         const movies = await movieService.getMovies();
 
         for (const movie of movies) {
-            console.log(`Movie ID: ${movie.idapi}`);
-            const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/videos?language=fr-FR`;
-            const options = {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
-                }
-            };
+            if (!movie.urltrailer){
+                // console.log(`Movie ID: ${movie.idapi}`);
+                const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/videos?language=fr-FR`;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
+                    }
+                };
 
-            try {
-                const response = await fetch(trailerUrl, options);
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des données depuis l\'API');
-                }
+                try {
+                    const response = await fetch(trailerUrl, options);
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des données depuis l\'API');
+                    }
 
-                const json = await response.json();
+                    const json = await response.json();
 
-                // Access trailer data
-                const trailer = json.results?.[0];
-                if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
-                    console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
-                    const url = `https://www.youtube.com/watch?v=${trailer.key}`;
-                    await movieService.addUrl(url, movie.idapi);
-                } else {
-                    console.log('No trailer found for this movie or trailer not from YouTube');
+                    // Access trailer data
+                    const trailer = json.results?.[0];
+                    if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
+                        // console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
+                        const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+                        await movieService.addUrl(url, movie.idapi);
+                    } else {
+                        // console.log('No trailer found for this movie or trailer not from YouTube');
+                    }
+                } catch (error) {
+                    console.error('Error fetching trailer or poster data:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching trailer or poster data:', error);
+                // console.log('---'); // Separator for each movie
             }
-            console.log('---'); // Separator for each movie
         }
 
         //-------------------------------------Trailer Serie-------------------------------------------
@@ -509,35 +511,37 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         const series = await serieService.getSeries();
 
         for (const serie of series) {
-            console.log(`Movie ID: ${serie.idapi}`);
-            const trailerUrl = `https://api.themoviedb.org/3/tv/${serie.idapi}/videos?language=fr-FR`;
-            const options = {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
-                }
-            };
+            if (!serie.urltrailer){
+                // console.log(`Movie ID: ${serie.idapi}`);
+                const trailerUrl = `https://api.themoviedb.org/3/tv/${serie.idapi}/videos?language=fr-FR`;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM' // Replace with your actual API key
+                    }
+                };
 
-            try {
-                const response = await fetch(trailerUrl, options);
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des données depuis l\'API');
-                }
+                try {
+                    const response = await fetch(trailerUrl, options);
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des données depuis l\'API');
+                    }
 
-                const json = await response.json();
-                const trailer = json.results?.[0];
-                if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
-                    console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
-                    const url = `https://www.youtube.com/watch?v=${trailer.key}`;
-                    await serieService.addUrl(url, serie.idapi);
-                } else {
-                    console.log('No trailer found for this serie or trailer not from YouTube');
+                    const json = await response.json();
+                    const trailer = json.results?.[0];
+                    if (trailer && trailer.site?.toLowerCase() === 'youtube') { // Check trailer object and site property (case-insensitive)
+                        // console.log(`Trailer URL: https://www.youtube.com/watch?v=${trailer.key}`);
+                        const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+                        await serieService.addUrl(url, serie.idapi);
+                    } else {
+                        // console.log('No trailer found for this serie or trailer not from YouTube');
+                    }
+                } catch (error) {
+                    console.error('Error fetching trailer or poster data:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching trailer or poster data:', error);
+                // console.log('---'); // Separator for each movie
             }
-            console.log('---'); // Separator for each movie
         }
 
         //------------------------------------platform--------------------------------------------
