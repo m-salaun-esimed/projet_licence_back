@@ -245,7 +245,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         // -------------------------------------------USER--------------------------------------------
 
         let listDeUser = [ "Leana", "Malo", "Carine", "Franck"]
-        let listDeLogin = ["Leana@gmail.com", "Malo@gmail.com", "Carine@gmail.com", "Franck@gmail.com"]
+        let listDeLogin = ["leana@gmail.com", "malo@gmail.com", "carine@gmail.com", "franck@gmail.com"]
 
         for (let i = 0; i < 4; i++) {
             const data = {
@@ -259,7 +259,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const data = {
             displayName: "Matthieu",
-            login: "Matthieu@gmail.com",
+            login: "matthieu@gmail.com",
             password: "azerty",
             admin: true
         };
