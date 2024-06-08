@@ -270,7 +270,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
         const fetchMovie = require('node-fetch');
         //80
-        for(let i = 1; i < 24; i++){
+        for(let i = 1; i < 80; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -369,7 +369,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         // }
         //-------------------------------------------Serie--------------------------------------------
         //60
-        for(let i = 1; i < 24; i++){
+        for(let i = 1; i < 60; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
