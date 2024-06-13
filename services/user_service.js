@@ -12,7 +12,7 @@ module.exports = class UserService {
     }
     
     hashPassword(password) {
-        return bcrypt.hashSync(password, 10)  // 10 : cost factor -> + élevé = hash + sûr
+        return bcrypt.hashSync(password, 10)
     }
 
     insertService(data) {

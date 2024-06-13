@@ -1,5 +1,19 @@
 const jwt = require('jsonwebtoken')
-const jwtKey = 'exemple_cours_secret_key'
+var jwtKey = process.env.GRAIN_DE_SEL
+
+if (jwtKey === undefined) {
+    const { env } = process;
+    const read_base64_json = function(varName) {
+        try {
+            return JSON.parse(Buffer.from(env[varName], "base64").toString())
+        } catch (err) {
+            throw new Error(`no ${varName} environment variable`)
+        }
+    };
+    const variables = read_base64_json('PLATFORM_VARIABLES')
+    jwtKey = variables["GRAIN_DE_SEL"]
+}
+
 const jwtExpirySeconds = 36000
 
 module.exports = (userAccountService) => {

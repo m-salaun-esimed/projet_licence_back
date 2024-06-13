@@ -15,7 +15,7 @@ describe('API Tests', function() {
         seedDatabase().then( async () => {
             console.log("Creating test user");
 
-            const data = {
+                const data = {
                 displayName : "test",
                 login: "test",
                 password : "test",
