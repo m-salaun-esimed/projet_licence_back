@@ -12,7 +12,21 @@ module.exports = class UserService {
     }
     
     hashPassword(password) {
-        return bcrypt.hashSync(password, 10)
+
+        var saltRounds = parseInt(process.env.BCRYPT_COST, 10);
+        if (saltRounds === undefined) {
+            const { env } = process;
+            const read_base64_json = function(varName) {
+                try {
+                    return JSON.parse(Buffer.from(env[varName], "base64").toString())
+                } catch (err) {
+                    throw new Error(`no ${varName} environment variable`)
+                }
+            };
+            const variables = read_base64_json('PLATFORM_VARIABLES')
+            saltRounds = variables["BCRYPT_COST"]
+        }
+        return bcrypt.hashSync(password, saltRounds)
     }
 
     insertService(data) {
