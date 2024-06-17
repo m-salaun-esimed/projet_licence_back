@@ -14,7 +14,6 @@ describe('API Tests', function() {
         console.log("api.test.js : avant seeder")
         seedDatabase().then( async () => {
             console.log("Creating test user");
-
                 const data = {
                 displayName : "test",
                 login: "test",
@@ -36,7 +35,7 @@ describe('API Tests', function() {
     it('should allow access with valid token', (done) => {
         chai.request(app)
             .get('/movieCategory')
-            .set('Authorization', `Bearer ${token}`)
+            .set('authorization', `Bearer ${token}`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
@@ -47,7 +46,7 @@ describe('API Tests', function() {
     it('should deny access with invalid token', (done) => {
         chai.request(app)
             .get('/movieCategory')
-            .set('Authorization', 'Bearer wrongtoken')
+            .set('authorization', 'Bearer wrongtoken')
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -58,7 +57,7 @@ describe('API Tests', function() {
         const categoryIds = '1';
         chai.request(app)
             .get('/movie/randomMovies')
-            .set('Authorization', `Bearer ${token}`)
+            .set('authorization', `Bearer ${token}`)
             .set('categoryids', categoryIds)
             .end((err, res) => {
                 res.should.have.status(200);
@@ -70,7 +69,7 @@ describe('API Tests', function() {
         const categoryIds = '1,2,3';
         chai.request(app)
             .get('/movie/randomMovies')
-            .set('Authorization', `Bearer wrongtoken`)
+            .set('authorization', `Bearer wrongtoken`)
             .set('categoryids', categoryIds)
             .end((err, res) => {
                 res.should.have.status(401);
@@ -82,14 +81,14 @@ describe('API Tests', function() {
         const idapi = 984324;
         chai.request(app)
             .post('/favorite/post')
-            .set('Authorization', `Bearer ${token}`)
+            .set('authorization', `Bearer ${token}`)
             .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
                 chai.request(app)
                     .get(`/favorite`)
-                    .set('Authorization', `Bearer ${token}`)
+                    .set('authorization', `Bearer ${token}`)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
@@ -105,20 +104,19 @@ describe('API Tests', function() {
         const idapi = 984324;
         chai.request(app)
             .post('/alreadySeenMovie/post')
-            .set('Authorization', `Bearer ${token}`)
+            .set('authorization', `Bearer ${token}`)
             .send({ idapi})
             .end((err, res) => {
                 res.should.have.status(200);
 
                 chai.request(app)
                     .get(`/alreadySeenMovie`)
-                    .set('Authorization', `Bearer ${token}`)
+                    .set('authorization', `Bearer ${token}`)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
                         const alreadySeenMovie = res.body.find(movie => movie.idapi === idapi);
                         expect(alreadySeenMovie).to.exist;
-
                         done();
                     });
             });

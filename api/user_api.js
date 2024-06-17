@@ -115,7 +115,7 @@ module.exports = (app, userService, jwt) => {
                 return res.status(400).json({ error: 'Le nom d\'utilisateur, l\'email et le mot de passe est obligatoire.' });
             }
 
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\- ])[A-Za-z\d@$!%*?&\- ]{8,}$/;
 
             if (!passwordRegex.test(password)) {
                 return res.status(400).json({ error: '\n' +

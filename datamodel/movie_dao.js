@@ -6,15 +6,6 @@ module.exports = class MovieDao extends BaseDAO {
         super(db, namespace)
     }
 
-    async getAllMovieAlreadySeen(){
-        let tab = "moviealreadyseen"
-        try {
-            return  await this.db.query(`SELECT * FROM ${tab}`);
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async getAllMovie(){
         let tab = "movie"
         try {

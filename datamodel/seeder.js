@@ -85,6 +85,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                 id SERIAL PRIMARY KEY,
                 idApi INT NOT NULL,
                 name VARCHAR(255) NOT NULL,
+                date VARCHAR(255),
                 urlTrailer VARCHAR(255),
                 overview TEXT NOT NULL,
                 note FLOAT NOT NULL,
@@ -98,6 +99,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             id SERIAL PRIMARY KEY,
             idApi INT NOT NULL,
             name VARCHAR(255) NOT NULL,
+            date VARCHAR(255),
             urlTrailer VARCHAR(255),
             overview TEXT NOT NULL,
             note FLOAT NOT NULL,
@@ -269,7 +271,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         const fetchMovie = require('node-fetch');
-        for(let i = 1; i < 70 ; i++){
+        for(let i = 1; i < 70; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -285,15 +287,15 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
             const jsonMovie = await responseMovie.json();
             const titles = jsonMovie.results.map(movie => movie.title);
-            // const dates = jsonMovie.results.map(movie => movie.release_date);
             const overviews = jsonMovie.results.map(movie => movie.overview);
             const genreIds = jsonMovie.results.map(movie => movie.genre_ids);
             const idapi = jsonMovie.results.map(movie => movie.id);
+            const dates = jsonMovie.results.map(movie => movie.release_date);
             const poster_path = jsonMovie.results.map(movie => movie.poster_path);
             const backdrop_path = jsonMovie.results.map(movie => movie.backdrop_path);
             const vote_average = jsonMovie.results.map(movie => movie.vote_average);
             await Promise.all(titles.map(async (movieTitle, index) => {
-                const dataMovie  = {
+                const dataMovie = {
                     idapi: idapi[index],
                     name: movieTitle,
                     overview: overviews[index],
@@ -302,6 +304,9 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                     backdrop_path: backdrop_path[index]
                 };
 
+                if (dates[index]) {
+                    dataMovie.date = dates[index];
+                }
 
                 const responseId = await movieService.insertService(dataMovie);
 
@@ -368,7 +373,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         // }
         //-------------------------------------------Serie--------------------------------------------
         //60
-        for(let i = 1; i < 50; i++){
+        for(let i = 1; i < 60; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
@@ -389,6 +394,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             const overviews = jsonMovie.results.map(movie => movie.overview);
             const genreIds = jsonMovie.results.map(movie => movie.genre_ids);
             const idapi = jsonMovie.results.map(movie => movie.id);
+            const dates = jsonMovie.results.map(movie => movie.first_air_date);
             const poster_path = jsonMovie.results.map(movie => movie.poster_path);
             const backdrop_path = jsonMovie.results.map(movie => movie.backdrop_path);
             const vote_average = jsonMovie.results.map(movie => movie.vote_average);
@@ -402,6 +408,9 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                     backdrop_path: backdrop_path[index]
                 };
 
+                if (dates[index]) {
+                    dataMovie.date = dates[index];
+                }
 
                 const responseId = await serieService.insertService(dataMovie);
                 for (let j = 0; j < genreIds[index].length; j ++){
