@@ -55,32 +55,33 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
-
     async getMoviesByCategorys(categoryIds, platformsIdsApi) {
-        try {
-            let tab = "movieCategory";
-            const queryString = `SELECT * FROM ${tab} WHERE idcategory IN (${categoryIds.join(',')})`;
-            const result = await this.db.query(queryString);
-            return result.rows;
-        } catch (error) {
-            throw error;
+        const validPlatformsIdsApi = platformsIdsApi.filter(id => !isNaN(id));
+        if (validPlatformsIdsApi.length === 0) {
+            try {
+                let tab = "movieCategory";
+                const queryString = `SELECT * FROM ${tab} WHERE idcategory IN (${categoryIds.join(',')})`;
+                const result = await this.db.query(queryString);
+                return result.rows;
+            } catch (error) {
+                throw error;
+            }
         }
-    }
-
-    async getMoviesByCategorys(categoryIds, platformsIdsApi) {
-        try {
-            let tab = "movieCategory";
-            const queryString = `
+        else{
+            try {
+                let tab = "movieCategory";
+                const queryString = `
             SELECT mc.*
             FROM ${tab} mc
             INNER JOIN MoviePlatform mp ON mc.idmovieapi = mp.idmovieapi
             WHERE mc.idcategory IN (${categoryIds.join(',')})
               AND mp.idplatformapi IN (${platformsIdsApi.join(',')})
         `;
-            const result = await this.db.query(queryString);
-            return result.rows;
-        } catch (error) {
-            throw error;
+                const result = await this.db.query(queryString);
+                return result.rows;
+            } catch (error) {
+                throw error;
+            }
         }
     }
 

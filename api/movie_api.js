@@ -31,7 +31,6 @@ module.exports = (app, movieService, jwt) => {
             }
             const categoryIdsArray = categoryids.split(',').map(id => parseInt(id));
             const platformsIdsApi = platformsids.split(',').map(idapi => parseInt(idapi));
-
             const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray, platformsIdsApi);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
             const alreadySeenIds = response.map(movie => movie.idapi);
