@@ -5,52 +5,60 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
     try {
         //------------------------------------DROP TABLE-----------------------------------------
 
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Favorite;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS AlreadySeen;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS MovieCategory ;
-        // `);
-        //
-        // await categoryParSerieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryparserie ;
-        // `);
-        //
-        // await serieCategoryService.dao.db.query(`
-        //     DROP TABLE IF EXISTS categoryserie;
-        // `);
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS friends_requests ;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS notifications ;
-        // `);
-        //
-        // await userService.dao.db.query(`
-        //     DROP TABLE IF EXISTS UserAccount;
-        // `);
-        //
-        // await movieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Movie;
-        // `);
-        //
-        // await categorieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS Category;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS serie;
-        // `);
-        //
-        // await serieService.dao.db.query(`
-        //     DROP TABLE IF EXISTS platform;
-        // `);
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS movieplatform;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS serieplatform;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Favorite;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS AlreadySeen;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS MovieCategory ;
+        `);
+
+        await categoryParSerieService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryparserie ;
+        `);
+
+        await serieCategoryService.dao.db.query(`
+            DROP TABLE IF EXISTS categoryserie;
+        `);
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS friends_requests ;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS notifications ;
+        `);
+
+        await userService.dao.db.query(`
+            DROP TABLE IF EXISTS UserAccount;
+        `);
+
+        await movieService.dao.db.query(`
+            DROP TABLE IF EXISTS Movie;
+        `);
+
+        await categorieService.dao.db.query(`
+            DROP TABLE IF EXISTS Category;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS serie;
+        `);
+
+        await serieService.dao.db.query(`
+            DROP TABLE IF EXISTS platforms;
+        `);
 
         // ------------------------------------CREATE TABLE-----------------------------------------
 
@@ -83,7 +91,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         await movieService.dao.db.query(`
             CREATE TABLE Movie (
                 id SERIAL PRIMARY KEY,
-                idApi INT NOT NULL,
+                idApi INT NOT NULL UNIQUE ,
                 name VARCHAR(255) NOT NULL,
                 date VARCHAR(255),
                 urlTrailer VARCHAR(255),
@@ -113,8 +121,10 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             CREATE TABLE MovieCategory (
                 id SERIAL PRIMARY KEY,
                 idMovie INT,
+                idmovieapi INT,
                 idCategory INT,
                 FOREIGN KEY (idMovie) REFERENCES Movie(id),
+                FOREIGN KEY (idmovieapi) REFERENCES Movie(idapi),
                 FOREIGN KEY (idCategory) REFERENCES Category(id)
             );
         `);
@@ -154,7 +164,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             id SERIAL PRIMARY KEY,
             receiver_id INT,
             sender_id INT,
-            notification_type VARCHAR(50), -- Par exemple, 'friend_request'
+            notification_type VARCHAR(50),
             notification_message TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             is_read BOOLEAN DEFAULT FALSE,
@@ -178,10 +188,31 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         `);
 
         await movieService.dao.db.query(`
-            CREATE TABLE platform (
-            id SERIAL PRIMARY KEY,
-            idapi INT,
-            name VARCHAR(50)
+            CREATE TABLE IF NOT EXISTS platforms (
+                id SERIAL PRIMARY KEY,
+                idapi INT UNIQUE,
+                provider_name VARCHAR(50),
+                logo_path VARCHAR(50)
+            );
+        `);
+        await movieService.dao.db.query(`
+            CREATE TABLE IF NOT EXISTS MoviePlatform (
+                id SERIAL PRIMARY KEY,
+                idmovieapi INT,
+                idplatformapi INT,
+                FOREIGN KEY (idmovieapi) REFERENCES Movie(idapi),
+                FOREIGN KEY (idplatformapi) REFERENCES platforms(idapi)
+            );
+        `);
+
+
+        await serieService.dao.db.query(`
+            CREATE TABLE SeriePlatform (
+                id SERIAL PRIMARY KEY,
+                idSerie INT,
+                idPlatform INT,
+                FOREIGN KEY (idSerie) REFERENCES serie(id),
+                FOREIGN KEY (idPlatform) REFERENCES platforms(id)
             );
         `);
 
@@ -271,7 +302,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
 
 
         const fetchMovie = require('node-fetch');
-        for(let i = 1; i < 5; i++){
+        for(let i = 1; i < 60; i++){
             const urlMovie = `https://api.themoviedb.org/3/trending/movie/day?language=fr&page=${i}`;
             const optionsMovie = {
                 method: 'GET',
@@ -315,6 +346,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
                     if (categorieId && categorieId.length > 0) {
                         const dataRelation = {
                             idmovie: responseId,
+                            idmovieapi:dataMovie.idapi,
                             idcategory: categorieId[0].id
                         };
                         await movieCategoryService.insertService(dataRelation);
@@ -373,7 +405,7 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
         // }
         //-------------------------------------------Serie--------------------------------------------
         //60
-        for(let i = 1; i < 5; i++){
+        for(let i = 1; i < 60; i++){
             const urlSerie = `https://api.themoviedb.org/3/trending/tv/day?language=fr&page=${i}`;
             const optionsSerie = {
                 method: 'GET',
@@ -552,18 +584,48 @@ module.exports =  (userService, movieService, categorieService, movieCategorySer
             }
         }
 
-        //------------------------------------platform--------------------------------------------
+        //------------------------------------platforms--------------------------------------------
 
-        const platformName = ["Amazon Video","Netflix","Apple TV","Disney Plus","Canal+","Canal VOD", "Canal+ Séries", "Crunchyroll"];
-        const idapi = [15,5,3,33, 40, 19,107, 30];
+        const platformName = ["Amazon Video", "Amazon Prime Video", "Netflix","Apple TV","Disney Plus","Canal+",
+            "Canal VOD", "Crunchyroll", "OCS Go", "OCS Amazon Channel", "YouTube Premium",
+            "Netflix basic with Ads", "Max", "TF1+", "Paramount+ Amazon Channel"];
+        const idapi = [10,119,8,2,337, 381,58, 283, 56,685, 188,    1796, 1899, 1754, 582];
 
         for(let i = 0; i < platformName.length; i++){
             const dataPlatform = {
                 idapi : idapi[i],
-                name : platformName[i]
+                provider_name : platformName[i]
             }
             await movieService.insertPlatform(dataPlatform);
         }
+
+        //----------------------------------platforms movie ----------------------------------------
+
+        for (const movie of movies) {
+            const trailerUrl = `https://api.themoviedb.org/3/movie/${movie.idapi}/watch/providers`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTM4ZTJiMmRjYjIyZjA1OGRlZTY5NmFlYzJjOWVhZCIsInN1YiI6IjY1Zjk4M2Y0YWJkZWMwMDE2MzZhYjhiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BLey_V_q7MHRPOaRlFa_ztrNevx2dXOq1U5LRRcAKVM'
+                }
+            };
+            try {
+                const response = await fetch(trailerUrl, options);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données depuis l\'API');
+                }
+                const data = await response.json();
+                if (data.results.FR && data.results.FR.flatrate) {
+                    await movieService.addPlatform(data.results.FR.flatrate, movie.idapi);
+                } else {
+                    console.log(`No FR flatrate data available for movie ID: ${movie.idapi}`);
+                }
+            } catch (error) {
+                console.error('Error fetching trailer or poster data:', error);
+            }
+        }
+
 
         resolve()
     }catch (error) {

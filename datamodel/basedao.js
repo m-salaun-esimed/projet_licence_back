@@ -19,7 +19,7 @@ module.exports = class BaseDAO {
     }
 
     async insertPlatform(data){
-        const tablename = "platform"
+        const tablename = "platforms"
         const keys = Object.keys(data);
         const values = Object.values(data);
 

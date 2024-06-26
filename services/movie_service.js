@@ -21,4 +21,8 @@ module.exports = class MovieService {
     async addUrl(url, idapi){
         await this.dao.addUrl(url, idapi);
     }
+
+    async addPlatform(platforms, idapi){
+        await this.dao.addPlatform(platforms, idapi);
+    }
 }

@@ -29,6 +29,22 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
+    async addPlatform(platforms, idapi) {
+        const tab = "movieplatform";
+        const query = `INSERT INTO ${tab} (idmovieapi, idplatformapi) VALUES ($1, $2)`;
+        try {
+            const results = [];
+            for (const platform of platforms) {
+                const result = await this.db.query(query, [idapi, platform.provider_id]);
+                results.push(result.rows);
+            }
+            return results;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
     async getMovieByIdMovieApi(idmovieapi){
         let tab = "movie"
         try {
@@ -40,7 +56,7 @@ module.exports = class MovieDao extends BaseDAO {
     }
 
 
-    async getMoviesByCategorys(categoryIds) {
+    async getMoviesByCategorys(categoryIds, platformsIdsApi) {
         try {
             let tab = "movieCategory";
             const queryString = `SELECT * FROM ${tab} WHERE idcategory IN (${categoryIds.join(',')})`;
@@ -50,6 +66,24 @@ module.exports = class MovieDao extends BaseDAO {
             throw error;
         }
     }
+
+    async getMoviesByCategorys(categoryIds, platformsIdsApi) {
+        try {
+            let tab = "movieCategory";
+            const queryString = `
+            SELECT mc.*
+            FROM ${tab} mc
+            INNER JOIN MoviePlatform mp ON mc.idmovieapi = mp.idmovieapi
+            WHERE mc.idcategory IN (${categoryIds.join(',')})
+              AND mp.idplatformapi IN (${platformsIdsApi.join(',')})
+        `;
+            const result = await this.db.query(queryString);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
     async getMoviesByIds(idMovies) {
         try {
@@ -74,7 +108,7 @@ module.exports = class MovieDao extends BaseDAO {
         }
     }
 
-    async getPlatform(idmovieapi) {
+    async getMoviePlatforms(idmovieapi) {
         try {
             const url = `https://api.themoviedb.org/3/movie/${idmovieapi}/watch/providers`;
             const options = {
@@ -91,6 +125,16 @@ module.exports = class MovieDao extends BaseDAO {
             }else {
                 throw new Error('Les informations pour la France ne sont pas disponibles.');
             }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getPlatforms(){
+        try {
+            const tab = "platforms";
+            const result = await this.db.query(`SELECT * FROM ${tab}`);
+            return result.rows;
         } catch (error) {
             throw error;
         }

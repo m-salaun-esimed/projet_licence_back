@@ -25,13 +25,14 @@ module.exports = (app, movieService, jwt) => {
 
     app.get("/movie/randomMovies",jwt.validateJWT, async (req, res) => {
         try {
-            const { categoryids } = req.headers;
+            const { categoryids, platformsids } = req.headers;
             if (categoryids === undefined){
                 res.status(404).json({ error: 'Erreur dans les données envoyées à la requête' });
             }
             const categoryIdsArray = categoryids.split(',').map(id => parseInt(id));
+            const platformsIdsApi = platformsids.split(',').map(idapi => parseInt(idapi));
 
-            const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray);
+            const movies = await movieService.dao.getMoviesByCategorys(categoryIdsArray, platformsIdsApi);
             const response = await movieService.dao.getAllDejaVu(req.user.id);
             const alreadySeenIds = response.map(movie => movie.idapi);
             if (movies.length < 5){
@@ -74,7 +75,17 @@ module.exports = (app, movieService, jwt) => {
     app.get("/movie/platform", jwt.validateJWT, async (req, res) => {
         try {
             const { idmovieapi } = req.headers;
-            const data = await movieService.dao.getPlatform(idmovieapi);
+            const data = await movieService.dao.getMoviePlatforms(idmovieapi);
+            res.json(data);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+        }
+    });
+
+    app.get("/platforms", jwt.validateJWT, async (req, res) => {
+        try {
+            const data = await movieService.dao.getPlatforms();
             res.json(data);
         } catch (error) {
             console.error(error);
